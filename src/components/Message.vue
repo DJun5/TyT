@@ -1,7 +1,7 @@
 <template>
     <Layout :has_share="false">
         <div >
-          asdasd
+
         </div>
     </Layout>
 </template>
