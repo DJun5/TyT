@@ -68,11 +68,12 @@ const routes =  [
       meta: { needLogin: true }
     },
     {
-      path: '/user/login',
-      name: 'Login',
-      component: Login,
-    }
-  ]
+    path: '/user/login',
+    name: 'Login',
+    component: Login,
+  }
+
+  ];
 
 
 // scrollBehavior:
