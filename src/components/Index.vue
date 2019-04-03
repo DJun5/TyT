@@ -36,7 +36,7 @@ export default {
             title: '个人中心',
             value: '/user',
             icon: 'person'
-          }
+          }],
           open: false,
           docked: false,
           layout_type: false,
@@ -50,6 +50,7 @@ export default {
         this.trigger = this.$el
     },
     methods: {
+
     },
     computed: {
         getLoading() {
