@@ -1,4 +1,4 @@
-<template> 
+<template>
     <div class="page_wrap slim_scrollbar">
         <div class="page_hd">
             <div class="search_box">
@@ -12,7 +12,7 @@
         <div class="page_bd">
             <div class="content">
                 <div class="list" v-if="movies && movies.length">
-                    <MediaCard :media="movies"></MediaCard>
+
                 </div>
                 <div style="text-align: center;padding-top: 20px;" v-if="showEmpt">抱歉，没有找到要找的东西噢！</div>
                 <mu-infinite-scroll :scroller="scroller" :loading="getLoading" @load="loadMore"/>
@@ -25,7 +25,6 @@
 <script>
 let _self;
 import Layout from '@/components/Layout';
-import MediaCard from '@/components/MediaCard';
 import { Toast } from 'mint-ui';
 
 export default {
@@ -129,8 +128,8 @@ export default {
         }
     },
     components: {
-        Layout,
-        MediaCard
+        Layout
+
     }
 };
 
@@ -155,7 +154,7 @@ export default {
             .search {
                 display: flex;
                 align-items:center;
-                width: 100%;
+                width: 100%;width: 100%;
                 height: @nav_bar;
                 line-height: @nav_bar;
                 .back {
@@ -189,7 +188,7 @@ export default {
             margin: 10px 0;
             text-align: left;
             border-bottom: 1px solid #eee;
-            
+
             .type {
                 padding: 10px;
                 background: #fff;

@@ -6,7 +6,7 @@ import router from './router'
 import store from './vuex/store'
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
-
+import * as colors from 'muse-ui/lib/theme/colors';
 // import Fastclick from 'fastclick'
 import Store from 'storejs'
 

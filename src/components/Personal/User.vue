@@ -1,6 +1,6 @@
 <template>
   <Layout :has_share="false">
-    <div class="wrap">
+    <div class="wrap"  >
         <mu-list>
           <mu-list-item title="我的收藏" to="user/favorite">
             <mu-icon slot="left" value="favorite"/>

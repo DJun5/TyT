@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/vuex/store';
-import Index from '@/components/Index'
-import Campus from '@/components/Campus'
-import Message from '@/components/Message'
-import User from '@/components/User'
+import Index from '@/components/Home/Index'
+import Campus from '@/components/School/Campus'
+import Message from '@/components/Message/Message'
+import User from '@/components/Personal/User'
 import Search from '@/components/Search'
 import About from '@/components/About'
 import Favorite from '@/components/Favorite'
 import Settings from '@/components/Settings'
-import Login from '@/components/login'
+import Login from '@/components/Login/login'
 import test from '@/components/test'
+import AddDynamic from '@/components/AddDynamic/addDynamic'
+import Find from '@/components/Home/find'
 
 Vue.use(VueRouter)
 
@@ -71,6 +73,18 @@ const routes =  [
     path: '/user/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/addDynamic',
+    name: 'AddDynamic',
+    component: AddDynamic,
+    meta: { keepAlive: true }
+  },
+  {
+    path: '/Home/find',
+    name: 'Find',
+    component: Find
+    //meta: { keepAlive: true }
   }
 
   ];

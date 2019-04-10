@@ -39,7 +39,7 @@
 
     <!--页面内容-->
   <div class="content_wrap">
-    <slot></slot>
+    <slot name="container" ></slot>
   </div>
     <!--页面内容-->
 
@@ -48,7 +48,11 @@
     <template>
       <mu-paper>
         <mu-bottom-nav :value="active_nav" @change="handleChange">
-          <mu-bottom-nav-item  :value="nav.value" :title="nav.title" :icon="nav.icon" v-for="nav in bottom_nav" :key="nav.title" />
+          <mu-bottom-nav-item  title="首页" icon="home" key="首页" value="/" />
+          <mu-bottom-nav-item  title="大学" icon="school" key="大学" value="/Campus" />
+          <mu-bottom-nav-item  icon="add_box" class="mu-icon"   key="添加" value="/addDynamic" />
+          <mu-bottom-nav-item  title="消息" icon="message" key="消息" value="/Message" />
+          <mu-bottom-nav-item  title="个人中心" icon="person" key="个人中心" value="/user" />
         </mu-bottom-nav>
       </mu-paper>
     </template>
@@ -74,23 +78,6 @@ export default {
     return {
       bg,
       active_nav: '/',
-      bottom_nav: [{
-        title: '首页',
-        value: '/',
-        icon: 'home'
-      }, {
-        title: '大学',
-        value: '/Campus',
-        icon: 'school'
-      }, {
-        title: '消息',
-        value: '/Message',
-        icon: 'message'
-      }, {
-        title: '个人中心',
-        value: '/user',
-        icon: 'person'
-      }],
       open: false,
       docked: false,
       layout_type: false,
@@ -153,7 +140,7 @@ export default {
     },
     setStatusBar() { //设置主题颜色（状态栏）
       let theme = Store.get('theme') || '';
-      let theme_color = '#7E57C2';
+      let theme_color = '#00695c';
       if (theme === 'def') {
         theme_color = '#7E57C2'
       }
@@ -230,6 +217,11 @@ export default {
     right: 0;
     width: 100%;
 
+}
+
+.mu-icon {
+  padding-top:15px;
+  color:red;
 }
 
 </style>
