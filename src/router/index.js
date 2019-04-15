@@ -12,8 +12,6 @@ import Settings from '@/components/Settings'
 import Login from '@/components/Login/login'
 import test from '@/components/test'
 import AddDynamic from '@/components/AddDynamic/addDynamic'
-import Find from '@/components/Home/find'
-
 Vue.use(VueRouter)
 
 const routes =  [
@@ -73,19 +71,15 @@ const routes =  [
     path: '/user/login',
     name: 'Login',
     component: Login,
+    meta: { keepAlive: true }
   },
   {
     path: '/addDynamic',
     name: 'AddDynamic',
     component: AddDynamic,
     meta: { keepAlive: true }
-  },
-  {
-    path: '/Home/find',
-    name: 'Find',
-    component: Find
-    //meta: { keepAlive: true }
   }
+
 
   ];
 

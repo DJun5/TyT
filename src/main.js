@@ -1,24 +1,31 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './vuex/store'
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
-import * as colors from 'muse-ui/lib/theme/colors';
-// import Fastclick from 'fastclick'
 import Store from 'storejs'
 
-import filters from './filters.js';
 
-// Fastclick.attach(document.body)
-Vue.use(MuseUI)
-Vue.use(Store)
+Vue.use(MuseUI);
+Vue.use(Store);
 
-Vue.config.productionTip = false
+const ToastOption = {
+  position: 'top', // 弹出的位置
+  time: 2000, // 显示的时长
+  closeIcon: 'close', // 关闭的图标
+  close: false, // 是否显示关闭按钮
+  successIcon: 'check_circle', // 成功信息图标
+  infoIcon: 'info', // 信息信息图标
+  warningIcon: 'priority_high', // 提醒信息图标
+  errorIcon: 'warning' // 错误信息图标
+}
 
-Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
+import Toast from 'muse-ui-toast';
+Vue.use(Toast, ToastOption);
+
+Vue.config.productionTip = false;
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -26,4 +33,4 @@ new Vue({
   store,
   template: '<App/>',
   components: { App }
-})
+});

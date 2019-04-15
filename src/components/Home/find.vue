@@ -1,18 +1,25 @@
 <template>
+
   <div class="card_first">
     <!--卡片展示-->
-    <mu-card  v-for=" item in userDynamic ">
+    <mu-card  v-for=" item,index in userDynamic " :key="index">
       <mu-card-header :title="item[0].user_name"  :sub-title="item[0].user_signature">
         <mu-avatar slot="avatar">
           <img  :src="item[0].user_avatar" >
         </mu-avatar>
-        <mu-button class="mu_add" @click="addQuery" >
-          <mu-icon :size="20"  value="add" class="mu_adds"  ></mu-icon>
+        <!--加关注-->
+        <button class="mu_add" @click="add_attention(index)"  ref="show"  v-if="!item[0].user_Befocused"   >
+          <mu-icon :size="20"  value="add" ></mu-icon>
           <div class="mu_font">关注</div>
-        </mu-button>
-        <mu-button class="mu_bu">
-          <mu-icon :size="30" value="more_horiz"  color="＃212121"></mu-icon>
-        </mu-button>
+        </button>
+        <!--加关注-->
+
+        <!--更多-->
+        <mu-icon-button class="mu_bu" @click="ts" icon="more_horiz"    >
+          <mu-icon :size="30" value="more_horiz" class="horiz_icon"  color="＃212121"></mu-icon>
+        </mu-icon-button>
+        <!--更多-->
+
       </mu-card-header>
       <mu-card-media>
         <img  :src="item[0].user_photo">
@@ -21,27 +28,32 @@
         {{item[0].user_substance}}
       </mu-card-text>
       <mu-card-actions>
-        <mu-button class="mu_favorite" >
-          <mu-icon :size="26" value="favorite_border" ></mu-icon>
-        </mu-button>
-        <mu-button class="mu_textsms" >
+        <!--点赞-->
+        <mu-checkbox  class="mu_favorite"   uncheckIcon="favorite_border" checkedIcon="favorite"  />
+        <!--评论-->
+        <mu-icon-button class="mu_textsms" @click="ts" >
           <mu-icon :size="26" value="textsms" ></mu-icon>
-        </mu-button>
-        <mu-button  class="mu_share">
+        </mu-icon-button>
+        <!--评论-->
+
+        <!--分享-->
+        <mu-icon-button  class="mu_share" @click="ts">
           <mu-icon :size="26" value="share"></mu-icon>
-        </mu-button>
-        <mu-button class="mu_turned" >
-          <mu-icon :size="26" value="turned_in" ></mu-icon>
-        </mu-button>
+        </mu-icon-button>
+        <!--分享-->
+
+        <!--收藏-->
+        <mu-checkbox class="mu_turned" uncheckIcon="turned_in_not" checkedIcon="turned_in"  />
+        <!--收藏-->
       </mu-card-actions>
     </mu-card>
-    <!--卡片展示-->
 
+    <!--卡片展示-->
   </div>
+
 </template>
 <script>
 let _self;
-import Layout from '@/components/Layout';
 import TestData from "../../../static/Json/TestData.json";
 export default {
   data: function() {
@@ -52,7 +64,9 @@ export default {
       page: 1,
       scroller: null,
       trigger: null,
+      add_show:true,
       userDynamic:[],
+      sum:0
     }
   },
     props: {
@@ -64,15 +78,22 @@ export default {
   created(){ //获取json对象
          this.userDynamic=TestData;
   },
-
   methods: {
-    addQuery() {
-      console.log("sdsdasd")
-    }
+     ts() {
+
+     },
+    add_attention(index) {//点击加关注
+      TestData[index][0].user_Befocused=true;
+      console.log(index);
+     },
+      favorite(){
+
+      }
     },
     computed: {
 
-    },
+
+    }
 };
 
 </script>
@@ -84,46 +105,52 @@ export default {
   height:100%;
   position: absolute;
 }
-.card {
-  width: 100%;
-  max-width:100%;
-  height:30% ;
-}
 .mu_bu{
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   position: absolute;
-  margin-top: -2px;
-  right: 20px;
+  margin-top: -4px;
+  right: 15px;
+  z-index: 5;
+
 }
 .mu_turned{
   position: absolute;
   color:#bdbdbd;
   right: 20px;
+  margin-top: -12px;
+  z-index: 5;
 }
 .mu_favorite{
   margin-left:2% ;
   color:#bdbdbd;
+  z-index:1;
+  margin-top: -22px;
+
 }
+
 .mu_textsms{
-  margin-left:8% ;
+  margin-left:4%;
   color:#bdbdbd;
+  z-index: 5;
+  margin-top: -22px;
 }
 .mu_share{
- margin-left:8% ;
- color:#bdbdbd;
+  margin-left:4% ;
+  color:#bdbdbd;
+  z-index: 5;
+  margin-top: -22px;
 }
 .mu_add{
   position: absolute;
   height: 25px;
   width: 55px;
+  background-color: transparent;
   color: #ff5252;
   border:1px solid #ff5252;
   border-radius:5px;
   right: 70px;
-}
-.mu_adds{
-  margin-top:1.5px;
+  z-index: 5;
 }
 .mu_font{
   float: right;
@@ -132,6 +159,10 @@ export default {
   margin-top:2.5px;
   margin-right:6.5px;
   font-size: 13px;
+}
+.horiz_icon{
+  margin-top: -9px;
+  margin-left: -8px;
 }
 .media_title {
   font-size: 1em!important;

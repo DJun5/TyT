@@ -1,6 +1,6 @@
 <template>
     <Layout :has_share="false">
-        <div>
+        <div slot="container">
            敬请期待!
         </div>
     </Layout>

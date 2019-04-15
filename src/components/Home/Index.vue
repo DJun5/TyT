@@ -1,8 +1,8 @@
 <template>
     <Layout :has_share="false">
-      <mu-appbar class="app_bar" :z-depth="0" slot="header">
+      <mu-appbar class="app_bar" :z-depth="1" slot="header">
         <!--上部Tabs-->
-        <mu-tabs :value="active1"  inverst  class="tabs"  @change="handleChange"   >
+        <mu-tabs :value="active1"    class="tabs"  @change="handleChange"   >
           <mu-tab value=0 >关注</mu-tab>
           <mu-tab value=1 >发现</mu-tab>
           <mu-tab value=2 >推荐</mu-tab>
@@ -11,27 +11,31 @@
        <!--搜索框-->
         <div class="search">
           <mu-icon :size="22" class="mu-icons" color="#bdbdbd" value="search" ></mu-icon>
-          <input type="search" class="search-input" placeholder="搜索内容暂定">
+          <mu-flat-button  class="search-input">搜索内容暂定</mu-flat-button>
         </div>
         <!--搜索框-->
       </mu-appbar>
       <!--主内容-->
       <div class="containers" slot="container" >
          <!--关注-->
+
           <div class="content" v-if="active1==0" >
-            <Find/>
+
+            <Attention/>
+
           </div>
+
         <!--关注-->
 
         <!--发现-->
           <div class="content" v-if="active1==1" >
-
+            <Find/>
           </div>
         <!--发现-->
 
         <!--推荐-->
           <div class="content" v-if="active1==2" >
-           dvdsvsv
+           内容暂待！
           </div>
         <!--推荐-->
 
@@ -42,8 +46,8 @@
 <script>
 let _self;
 import Layout from '@/components/Layout';
-import Find from '@/components/Home/Find';
-
+import Find from '@/components/Home/find';
+import Attention from '@/components/Home/attention';
 export default {
     data: function() {
         return {
@@ -78,7 +82,8 @@ export default {
     },
     components: {
         Layout,
-        Find
+        Find,
+      Attention
     }
 };
 
@@ -95,8 +100,12 @@ export default {
   width:100%;
   position: absolute;
   height: 80%;
-   overflow: auto;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+.containers::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
+  width: 0px;
+  height: 0px;
 }
 .tab {
   width: 50%;
@@ -138,7 +147,6 @@ export default {
 }
 .search-input {
   position: absolute;
-  border-radius: 10px;
   width:100%;
   color:#bdbdbd;
   text-align: center;
@@ -146,6 +154,7 @@ export default {
   border:none;
   height: 25px;
   font-size: 15px;
+  border-radius: 15px;
 }
 .mu-tab-link{
   color: #bdbdbd;

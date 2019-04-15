@@ -1,7 +1,7 @@
 <template>
   <Layout :has_share="false">
-    <div class="wrap"  >
-        <mu-list>
+    <div class="wrap" slot="container"  >
+        <!--<mu-list>
           <mu-list-item title="我的收藏" to="user/favorite">
             <mu-icon slot="left" value="favorite"/>
             <mu-icon slot="right" value="keyboard_arrow_right"/>
@@ -23,7 +23,8 @@
             <mu-icon slot="left" value="timeline"/>
             <mu-icon slot="right" value="keyboard_arrow_right"/>
           </mu-list-item>
-        </mu-list>
+        </mu-list>-->
+      内容暂待!
     </div>
   </Layout>
 </template>

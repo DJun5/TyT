@@ -1,42 +1,14 @@
 <template>
     <Layout :has_share="false">
         <div slot="container">
-          <mu-flex justify-content="left" align-items="center" wrap="wrap" class="icon-flex-wrap">
-            <mu-button color="primary">
-              ACCEPT
-              <mu-icon value="check_circle" right></mu-icon>
-            </mu-button>
-            <mu-button color="red">
-              DECLINE
-              <mu-icon value="block" right></mu-icon>
-            </mu-button>
-            <mu-button color="darkBlack">
-              <mu-icon value="remove_circle" left></mu-icon>
-              CANCEL
-            </mu-button>
-            <mu-button color="orange">
-              <mu-icon value="arrow_back" left></mu-icon>BACK
-            </mu-button>
-            <mu-button color="purple">
-              <mu-icon value="build"></mu-icon>
-            </mu-button>
-            <mu-button color="indigo">
-              <mu-icon value="backup"></mu-icon>
-            </mu-button>
-            <mu-button color="blue" icon>
-              <mu-icon value="thumb_up"></mu-icon>
-            </mu-button>
-            <mu-button color="red" icon>
-              <mu-icon value="thumb_down"></mu-icon>
-            </mu-button>
-          </mu-flex>
+          内容暂待！
         </div>
     </Layout>
 </template>
 <script>
 let _self;
 import Layout from '@/components/Layout';
-
+import { Button,Snackbar} from 'muse-ui';
 export default {
     data: function() {
         return {
@@ -46,7 +18,8 @@ export default {
             scroller: null,
             trigger: null,
             num: 10,
-           text: 'List'
+           text: 'List',
+          toast: false
         };
     },
     created() {
@@ -54,7 +27,12 @@ export default {
     },
 
     methods: {
-
+      backTopCallBack () {
+        window.alert('I back top!')
+      },
+      ts() {
+        console.log("sdsa");
+      }
     },
     computed: {
         getLoading() {
@@ -63,7 +41,15 @@ export default {
             } else {
                 return false;
             }
-        }
+        },
+      icon () {
+        return {
+          success: 'check_circle',
+          info: 'info',
+          warning: 'priority_high',
+          error: 'warning'
+        }[this.color.color]
+      }
     },
     components: {
         Layout
@@ -78,11 +64,20 @@ export default {
 .page_wrap {
     width: 100%;
     height: 100%;
-    background: #f5f5f5;
+   background-color: red;
 
 }
-.icon-flex-wrap .mu-button {
-  margin: 6px 8px;
+
+.demo-snackbar-radio {
+  margin: 8px 0;
+}
+.sd{
+  background-color: red;
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  z-index:5;
+
 }
 
 </style>
