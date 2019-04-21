@@ -1,0 +1,47 @@
+
+.mu_bu{
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  right: 15px;
+  margin-top: -3px;
+  z-index:100;
+}
+.mu_turned{
+  position: absolute;
+  color:#bdbdbd;
+  right: 20px;
+  margin-top: -8px;
+  z-index: 5;
+}
+.mu_favorite{
+  margin-left:2% ;
+  z-index:100;
+  color:#ff2741;
+  margin-top: -22px;
+}
+
+.mu_textsms{
+  margin-left:4%;
+  color:#bdbdbd;
+  z-index: 5;
+  margin-top: -22px;
+}
+.mu_share{
+  margin-left:4% ;
+  color:#bdbdbd;
+  z-index: 5;
+  margin-top: -22px;
+}
+.mu_add{
+  position: absolute;
+  right: 70px;
+  z-index:100;
+  box-shadow:none;
+  border: 1px solid #ff2741;
+}
+
+
+
+
+

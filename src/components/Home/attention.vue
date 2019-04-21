@@ -3,67 +3,59 @@
    <div class="attention_header">
      <div class="add_dynamic" v-if="has_dynamic">
      <!--卡片展示-->
-       <mu-card  v-for=" item,index in userDynamic ">
+       <mu-card  v-for=" item,index in userDynamic " :key="index">
          <mu-card-header :title="item[0].user_name"  :sub-title="item[0].user_signature">
            <mu-avatar slot="avatar">
              <img  :src="item[0].user_avatar" >
            </mu-avatar>
            <!--加关注-->
-           <!-- <mu-raised-button class="mu_add"  label="关注"  iconClass="sds"   icon="add" />-->
-           <button class="mu_add" @click="add_attention(index)"   v-if="add_show"   >
+           <mu-button class="mu_add" textColor="red" @click="add_attention(index)"   v-if="!item[0].user_Befocused" round small >
              <mu-icon :size="20"  value="add" ></mu-icon>
-             <div class="mu_font">关注</div>
-           </button>
+             关注
+           </mu-button>
            <!--加关注-->
-
            <!--更多-->
-           <mu-icon-button class="mu_bu" @click="ts" icon="more_horiz"    >
-             <mu-icon :size="30" value="more_horiz" class="horiz_icon"  color="＃212121"></mu-icon>
-           </mu-icon-button>
+           <mu-button icon class="mu_bu" @click="ts"     >
+             <mu-icon :size="30" value="more_horiz"   color="＃212121"></mu-icon>
+           </mu-button>
            <!--更多-->
-
          </mu-card-header>
-         <mu-card-media>
-           <img  :src="item[0].user_photo">
-         </mu-card-media>
          <mu-card-text>
            {{item[0].user_substance}}
          </mu-card-text>
+         <mu-card-media>
+           <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
+           <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
+         </mu-card-media>
+
          <mu-card-actions>
            <!--点赞-->
-
-           <mu-icon-button  class="mu_favorite" @click="ts" >
-             <mu-icon :size="26" value="favorite_border" ></mu-icon>
-           </mu-icon-button>
-           <!--点赞-->
-
+           <mu-checkbox  class="mu_favorite"   uncheckIcon="favorite_border" checkedIcon="favorite"  />
            <!--评论-->
-           <mu-icon-button class="mu_textsms" @click="ts" >
-             <mu-icon :size="26" value="textsms" ></mu-icon>
-           </mu-icon-button>
+           <mu-button icon class="mu_textsms" @click="ts" >
+             <mu-icon :size="22" value="textsms" ></mu-icon>
+           </mu-button>
            <!--评论-->
 
            <!--分享-->
-           <mu-icon-button  class="mu_share" @click="ts">
-             <mu-icon :size="26" value="share"></mu-icon>
-           </mu-icon-button>
+           <mu-button icon  class="mu_share" @click="ts">
+             <mu-icon :size="22" value="share"></mu-icon>
+           </mu-button>
            <!--分享-->
 
-           <!--转发-->
-           <mu-icon-button class="mu_turned"  @click="ts">
-             <mu-icon :size="26" value="turned_in" ></mu-icon>
-           </mu-icon-button>
-           <!--转发-->
+           <!--收藏-->
+           <mu-checkbox class="mu_turned"   uncheckIcon="turned_in_not" checkedIcon="turned_in"  />
+           <!--收藏-->
          </mu-card-actions>
        </mu-card>
        <!--卡片展示-->
    </div>
+
    </div>
    <div class="no_dynamic" v-if="!has_dynamic">
      <span class="no_dynamic_container">你还没有关注过人</span>
      <span class="no_dynamic_containers">看看大家都在关注那些人吧！</span>
    </div>
-
    <mu-paper>
      <!--横向滚动的头部-->
      <div class="paper_header" >
@@ -80,9 +72,9 @@
          <!--纸片展示“可能感兴趣的人”-->
          <mu-paper class="demo-paper" :z-depth="1" v-for=" interested_people,index in peopleInterested " :key="interested_people[0].client_name" >
              <!--清除按钮-->
-           <mu-icon-button icon class="clear_button" @click="deletePeople(index)"  >
+           <mu-button icon class="clear_button" @click="deletePeople(index)"  >
              <mu-icon value="clear" :size="18" color="#bdbdbd" ></mu-icon>
-           </mu-icon-button>
+           </mu-button>
            <!--清除按钮-->
            <!--头像-->
          <mu-avatar :size="70" class="paper_avatar">
@@ -91,18 +83,18 @@
            <!--头像-->
          <span class="paper_titles">{{interested_people[0].client_name}}</span>
          <span class="paper_subtitle">{{interested_people[0].client_subtitle}}</span>
-         <mu-raised-button  class="paper_button" @click="attention" v-if="attentioned" label="关注"/>
-           <mu-flat-button class="attention_already"   v-if="!attentioned"  >已关注</mu-flat-button>
+         <mu-button flat  class="paper_button" @click="attention" v-if="attentioned" >关注</mu-button>
+           <mu-button flat class="attention_already"   v-if="!attentioned"  >已关注</mu-button>
        </mu-paper>
          <!--纸片展示“可能感兴趣的人”-->
        </div>
      </div>
        <!--横向滚动块-->
      </div>
+     <!--横向滚动的头部-->
    </mu-paper>
-   <!--横向滚动的头部-->
  </div>
-
+</div>
 </template>
 <script>
   let _self;
@@ -114,7 +106,7 @@
       return {
         userDynamic:[],
         peopleInterested:[],
-        has_dynamic: false,
+        has_dynamic: true,
         width:0,
         attentioned:true
       }
@@ -122,12 +114,15 @@
     created(){ //获取json对象
       this.userDynamic=TestData;//获取到动态的测试数据
       this.peopleInterested=TetsData2;//获取到横向滚动的测试数据
+      this.widthData=50+"%";
       this.$nextTick(() => {//调用滚动方法
-        this.personScroll();
-    });
-    },
+         this.personScroll();
 
+    });
+
+    },
     methods: {
+
       GetNum() {//计算出横向滚动组件需要的总宽度
         this.width=120*Object.keys(this.peopleInterested).length;
         return this.width;
@@ -149,86 +144,54 @@
       });
       },
       ts() {
-        console.log("sdsdasd")
+        console.log("sdsdasd");
       },
       deletePeople(index) {//清楚感兴趣的人
         this.width=120*Object.keys(this.peopleInterested).length;
         this.$delete(this.peopleInterested,index);
       },
+      add_attention(index) {//点击加关注
+        TestData[index][0].user_Befocused=true;
+        console.log(index);
+      },
       attention() {
-
+        this.attentioned=false;
+      },
+      ts(){
+        console.log("dsad");
       }
     },
     watch:{//监听横滑动的宽度
       width: function(){
         this.personScroll();
       }
-
     }
   }
 </script>
 
 <style scoped lang="less">
   @import url('../../assets/less/common.less');
-.attentions{
-  position: absolute;
-  width: 100%;
-  height:100%;
-}
+  @import "../../assets/Css/Card.css";
+  .images{
+    float: left;
+    min-width: 33%;
+    padding: 1px;
+    max-width: 100%;
+  }
+  .mu-card-actions{
+    top: 10px;
+    clear:both;
+  }
+  .attentions{
+     position: absolute;
+     width: 100%;
+     height:100%;
+   }
+  .mu-paper{
+    height: 40%;
+    background-color:#fafafa;
+  }
 
-.mu-paper{
-  height: 40%;
-  background-color:#fafafa;
-}
-  .mu_bu{
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    margin-top: -2px;
-    right: 20px;
-  }
-  .mu_more{
-    border:none;
-    height: 25px;
-    width:70px;
-    background-color: transparent;
-    color:#bdbdbd ;
-  }
-  .mu_turned{
-    position: absolute;
-    color:#bdbdbd;
-    right: 20px;
-  }
-  .mu_favorite{
-    margin-left:2% ;
-    color:#bdbdbd;
-  }
-  .mu_textsms{
-    margin-left:8% ;
-    color:#bdbdbd;
-  }
-  .mu_share{
-    margin-left:8% ;
-    color:#bdbdbd;
-  }
-  .mu_add{
-    position: absolute;
-    height: 25px;
-    width: 55px;
-    color: #ff5252;
-    border:1px solid #ff5252;
-    border-radius:5px;
-    right: 70px;
-    z-index:1;
-  }
-  .mu_font{
-    float: right;
-    width:25px;
-    height: 20px;
-    margin-top:2.5px;
-    margin-right:6.5px;
-    font-size: 13px;
-  }
   .paper_header {
     position:relative;
     height: 30%;
@@ -248,11 +211,18 @@
     right: 10px;
     width: 80px;;
     margin-top: 8px;
-    z-index: 5;
+    z-index:5;
+  }
+  .mu_more{
+    border:none;
+    height: 25px;
+    width:70px;
+    background-color: transparent;
+    color:#bdbdbd ;
 
   }
   .paper_avatar{
-   margin-left: 18px;
+    margin-left: 18px;
     margin-top: 15px;
   }
   .paper_titles{
@@ -315,12 +285,11 @@
     height: 0px;
   }
   .demo-paper{
-     width: 110px;
-     height: 170px;
-     margin-left:8px;
+    width: 110px;
+    height: 170px;
+    margin-left:8px;
   }
   .no_dynamic{
-
     height: 18%;
     text-align: center;
   }
@@ -340,4 +309,6 @@
     margin-left:72px;
     margin-top:-10px;
   }
+
 </style>
+

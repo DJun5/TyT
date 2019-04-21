@@ -1,54 +1,59 @@
 <template>
     <Layout :has_share="false">
-        <div slot="container">
-          内容暂待！
+        <div slot="container" >
+          <mu-checkbox v-model="checkbox1" uncheck-icon="favorite_border" checked-icon="favorite" label="自定义图标"></mu-checkbox>
         </div>
+
     </Layout>
 </template>
 <script>
 let _self;
 import Layout from '@/components/Layout';
-import { Button,Snackbar} from 'muse-ui';
 export default {
-    data: function() {
+    data() {
+  const list = [];
+  for (let i = 0; i < 11; i++) {
+    list.push('item' + (i + 1))
+}
         return {
-            loading: 'init',
+            list,
             pageIndex: 1,
-            refreshing: false,
-            scroller: null,
-            trigger: null,
             num: 10,
-           text: 'List',
-          toast: false
+            text: 'List',
+           if_image:true,
+           refreshing: false,
+           loading: false,
+          open: false,
+          trigger: null,
+          checkbox1:true
         };
     },
     created() {
         _self = this;
     },
+  mounted () {
+    this.trigger = this.$refs.button.$el;
+  },
 
     methods: {
-      backTopCallBack () {
-        window.alert('I back top!')
-      },
       ts() {
         console.log("sdsa");
-      }
-    },
-    computed: {
-        getLoading() {
-            if (this.loading === 'loading') {
-                return true;
-            } else {
-                return false;
-            }
-        },
-      icon () {
-        return {
-          success: 'check_circle',
-          info: 'info',
-          warning: 'priority_high',
-          error: 'warning'
-        }[this.color.color]
+      },
+      refresh () {
+        this.refreshing = true;
+        this.$refs.container.scrollTop = 0;
+        setTimeout(() => {
+          this.refreshing = false;
+          this.text = this.text === 'List' ? 'Menu' : 'List';
+          this.num = 10;
+      }, 2000)
+      },
+      load () {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+        this.num += 10;
+      }, 2000)
       }
     },
     components: {
@@ -61,23 +66,22 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 @import url('../../assets/less/common.less');
-.page_wrap {
-    width: 100%;
-    height: 100%;
-   background-color: red;
 
-}
-
-.demo-snackbar-radio {
-  margin: 8px 0;
-}
-.sd{
-  background-color: red;
+.demo-loadmore-wrap {
   width: 100%;
-  height: 200px;
-  position: absolute;
-  z-index:5;
+  max-width: 360px;
+  height: 420px;
 
+  display: flex;
+  flex-direction: column;
+.mu-appbar {
+  width: 100%;
 }
-
+}
+.demo-loadmore-content {
+  flex: 1;
+  overflow: auto;
+  background-color: red;
+  -webkit-overflow-scrolling: touch;
+}
 </style>
