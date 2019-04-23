@@ -36,20 +36,21 @@ export default {
   watch: {
     // 页面切换过渡动画逻辑
     '$route' (to, from) {
-      const toDepth = to.path.split('/').length
-      const fromDepth = from.path.split('/').length
-      // this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-      // console.log('toDepth: '+ toDepth + '\n fromDepth: ' + fromDepth);
+       const toDepth = to.path.split('/').length;
+      const fromDepth = from.path.split('/').length;
+       console.log('toDepth: '+ toDepth + '\n fromDepth: ' + fromDepth);
       if (toDepth === fromDepth) {
-        this.transitionName = '';
-      }
-      if (toDepth < fromDepth) {
-        this.transitionName = 'slide-right';
+        this.transitionName = ' ';
       }
       if (toDepth > fromDepth) {
+        this.transitionName = 'slide-right-enter';
+      }
+      if (toDepth <fromDepth) {
         this.transitionName = 'slide-left';
       }
     }
+
+
   },
   created() {
     _self = this;
@@ -92,16 +93,17 @@ export default {
 .slide-left-enter-active,
 .slide-left-leave-active {
   will-change: transform;
-  transition: all 250ms;
+  transition: all 500ms;
   height: 100%;
-  top: 0;
+  top:0;
+
   position: absolute;
   backface-visibility: hidden;
-  perspective: 1000;
+
 }
 
 .slide-right-enter {
-  opacity: 0;
+
   transform: translate3d(-100%, 0, 0);
 }
 

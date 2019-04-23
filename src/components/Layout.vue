@@ -1,14 +1,19 @@
 <template>
-  <div class="container slim_scrollbar">
+
+  <div class="framework">
     <!--头部-->
   <div class="header_wrap">
     <slot name="header">
         <!--设置为侧边栏-->
-          <mu-icon-button icon="menu" slot="left" v-if="has_menu && layout_type" @click="openMenu" />
-        <!--设置为侧边栏-->
+          <mu-button icon slot="left" v-if="has_menu && layout_type" @click="openMenu" >
+            <mu-icon  value="menu"></mu-icon>
+            </mu-button>
+      <!--设置为侧边栏-->
 
         <!--返回上一级按钮-->
-            <mu-icon-button icon="arrow_back" slot="left" v-if="!has_menu" @click="goBack" />
+            <mu-button icon  slot="left" v-if="!has_menu" @click="goBack">
+              <mu-icon  value="arrow_back"></mu-icon>
+            </mu-button>
       <!--返回上一级按钮-->
 
         <!--分享和收藏（可扩展）-->
@@ -45,7 +50,7 @@
 
     <!--底部导航-->
   <div class="footer_wrap" v-if="has_footer && !layout_type">
-    <template>
+
       <mu-paper>
         <mu-bottom-nav :value="active_nav" @change="handleChange">
           <mu-bottom-nav-item  title="首页" icon="home" key="首页" value="/" />
@@ -55,7 +60,6 @@
           <mu-bottom-nav-item  title="个人中心" icon="person" key="个人中心" value="/user" />
         </mu-bottom-nav>
       </mu-paper>
-    </template>
   </div>
     <!--底部导航-->
 
@@ -66,6 +70,7 @@
   </mu-dialog>
     <!--分享到-->
 </div>
+
 </template>
 <script>
 let _self;
@@ -82,6 +87,7 @@ export default {
       docked: false,
       layout_type: false,
       dialog: false,
+
     };
   },
   props: {
@@ -197,31 +203,29 @@ export default {
     isCordova() {
       return this.$store.state.user.is_cordova;
     },
-  },
-  components: {
-
   }
+
 };
 
 </script>
 <style scoped lang="less">
-.container {
+.framework {
   width: 100%;
   height: 100%;
+  padding: 0px;
   overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
 }
   .footer_wrap {
-    position: fixed;
+  position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-
 }
-
 .mu-icon {
   padding-top:15px;
   color:red;
 }
-
 </style>
