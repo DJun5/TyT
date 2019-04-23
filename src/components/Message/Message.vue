@@ -102,7 +102,7 @@ export default {
             trigger: null,
             num: 10,
            text: 'List',
-          toast: false
+          toast: false,
         };
     },
     created() {
@@ -117,7 +117,7 @@ export default {
         console.log("sdsa");
       },
      address() {
-       this.$router.push("/Message/Address");
+       this.$router.push("/message/address");
       }
     },
     computed: {

@@ -12,7 +12,8 @@ import Settings from '@/components/Settings'
 import Login from '@/components/Login/login'
 import test from '@/components/test'
 import AddDynamic from '@/components/AddDynamic/addDynamic'
-import Layout from '@/components/Layout'
+import Address from '@/components/Message/Address'
+import Addfriend from '@/components/Message/Addfriend'
 Vue.use(VueRouter)
 
 const routes =  [
@@ -22,12 +23,6 @@ const routes =  [
       component: Index,
       meta: { keepAlive: true }
     },
-  {
-    path: '/Layout',
-    name: 'Layout',
-    component: Layout,
-    meta: { keepAlive: true }
-  },
     {
       path: '/campus',
       name: 'Campus',
@@ -40,6 +35,18 @@ const routes =  [
       component: Message,
       meta: { keepAlive: true }
     },
+  {
+    path: '/message/address',
+    name: 'Address',
+    component: Address,
+
+  },
+  {
+    path: '/message/addfriend',
+    name: 'Addfriend',
+    component: Addfriend,
+
+  },
     {
       path: '/user',
       name: 'User',
@@ -55,17 +62,17 @@ const routes =  [
     {
       path: '/user/about',
       name: 'About',
-      component: About
+      component: About,
     },
     {
       path: '/user/favorite',
       name: 'Favorite',
-      component: Favorite
+      component: Favorite,
     },
     {
       path: '/user/settings',
       name: 'Settings',
-      component: Settings
+      component: Settings,
     },
     {
       path: '/user/test',
