@@ -3,48 +3,56 @@
    <div class="attention_header">
      <div class="add_dynamic" v-if="has_dynamic">
      <!--卡片展示-->
-       <mu-card  v-for=" item,index in userDynamic " :key="index">
+       <mu-card  v-for="(item,index) in userDynamic" :key="item[0].user_name">
          <mu-card-header :title="item[0].user_name"  :sub-title="item[0].user_signature">
            <mu-avatar slot="avatar">
-             <img  :src="item[0].user_avatar" >
+             <img   :src="item[0].user_avatar" >
            </mu-avatar>
-           <!--加关注-->
-           <mu-button class="mu_add" textColor="red" @click="add_attention(index)"   v-if="!item[0].user_Befocused" round small >
-             <mu-icon :size="20"  value="add" ></mu-icon>
-             关注
-           </mu-button>
-           <!--加关注-->
            <!--更多-->
-           <mu-button icon class="mu_bu" @click="ts"     >
-             <mu-icon :size="30" value="more_horiz"   color="＃212121"></mu-icon>
-           </mu-button>
+           <mu-menu  class="mu_bu">
+             <mu-button icon  >
+               <mu-icon :size="30" value="more_horiz"  color="＃212121"></mu-icon>
+             </mu-button>
+             <mu-list slot="content">
+               <mu-list-item button>
+                 <mu-list-item-title>举报</mu-list-item-title>
+               </mu-list-item>
+               <mu-list-item button>
+                 <mu-list-item-title>收藏</mu-list-item-title>
+               </mu-list-item>
+             </mu-list>
+           </mu-menu>
            <!--更多-->
          </mu-card-header>
          <mu-card-text>
            {{item[0].user_substance}}
          </mu-card-text>
          <mu-card-media>
-           <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
-           <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
+           <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+           <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
+           <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+           <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+           <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
+           <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+           <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+           <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
+           <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
          </mu-card-media>
-
          <mu-card-actions>
            <!--点赞-->
-           <mu-checkbox  class="mu_favorite"   uncheckIcon="favorite_border" checkedIcon="favorite"  />
+           <mu-checkbox  v-model="likes" :value="'favorite'+index" @change="click_favorite(index)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
            <!--评论-->
            <mu-button icon class="mu_textsms" @click="ts" >
              <mu-icon :size="22" value="textsms" ></mu-icon>
            </mu-button>
            <!--评论-->
-
            <!--分享-->
            <mu-button icon  class="mu_share" @click="ts">
-             <mu-icon :size="22" value="share"></mu-icon>
+             <mu-icon :size="22" value="share"  ></mu-icon>
            </mu-button>
            <!--分享-->
-
            <!--收藏-->
-           <mu-checkbox class="mu_turned"   uncheckIcon="turned_in_not" checkedIcon="turned_in"  />
+           <mu-checkbox v-model="likes"   :value="'turned'+index" @change="click_turn"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
            <!--收藏-->
          </mu-card-actions>
        </mu-card>
@@ -52,10 +60,12 @@
    </div>
 
    </div>
+   <!--没有关注的人时显示-->
    <div class="no_dynamic" v-if="!has_dynamic">
      <span class="no_dynamic_container">你还没有关注过人</span>
      <span class="no_dynamic_containers">看看大家都在关注那些人吧！</span>
    </div>
+   <!--没有关注的人时显示-->
    <mu-paper>
      <!--横向滚动的头部-->
      <div class="paper_header" >
@@ -104,30 +114,26 @@
   export default {
     data: function () {
       return {
-        userDynamic:[],
         peopleInterested:[],
-        has_dynamic: true,
+        has_dynamic:false ,
         width:0,
-        attentioned:true
+        attentioned:true,
+        likes:[],
       }
     },
-    created(){ //获取json对象
-      this.userDynamic=TestData;//获取到动态的测试数据
+    created(){
       this.peopleInterested=TetsData2;//获取到横向滚动的测试数据
-      this.widthData=50+"%";
+      this.widthData=100/9+"%";
       this.$nextTick(() => {//调用滚动方法
          this.personScroll();
-
     });
-
     },
     methods: {
-
-      GetNum() {//计算出横向滚动组件需要的总宽度
+      GetNum() {
         this.width=120*Object.keys(this.peopleInterested).length;
         return this.width;
-      },
-      personScroll() {//横向滚动
+      },//计算出横向滚动组件需要的总宽度
+      personScroll() {
         this.$refs.paper_scroll.style.width = this.GetNum() + "px";
         this.$nextTick(() => {
           if (!this.scroll) {
@@ -142,29 +148,31 @@
           this.scroll.refresh();
         }
       });
-      },
+      },//横向滚动
       ts() {
         console.log("sdsdasd");
       },
-      deletePeople(index) {//清楚感兴趣的人
+      deletePeople(index) {
         this.width=120*Object.keys(this.peopleInterested).length;
         this.$delete(this.peopleInterested,index);
-      },
-      add_attention(index) {//点击加关注
+      },//清楚感兴趣的人
+      add_attention(index) {
         TestData[index][0].user_Befocused=true;
         console.log(index);
-      },
+      },//点击加关注
       attention() {
         this.attentioned=false;
-      },
-      ts(){
-        console.log("dsad");
-      }
+      },//可能认识的人加关注,
+      click_favorite(index){
+        console.log(index)
+      },//点赞
+      click_turn(){
+      },//收藏
     },
-    watch:{//监听横滑动的宽度
+    watch:{
       width: function(){
         this.personScroll();
-      }
+      }//监听横滑动的宽度
     }
   }
 </script>
@@ -172,6 +180,11 @@
 <style scoped lang="less">
   @import url('../../assets/less/common.less');
   @import "../../assets/Css/Card.css";
+  image[lazy=loading] {
+    width: 40px;
+    height: 300px;
+    margin: auto;
+  }
   .images{
     float: left;
     min-width: 33%;
@@ -309,6 +322,5 @@
     margin-left:72px;
     margin-top:-10px;
   }
-
 </style>
 

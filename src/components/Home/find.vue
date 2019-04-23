@@ -2,35 +2,49 @@
   <div class="card_first" ref="container">
     <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
     <!--卡片展示-->
-      <mu-card  v-for="(item,index) in userDynamic" :key="item[0].user_name">
-        <mu-card-header :title="item[0].user_name"  :sub-title="item[0].user_signature">
+      <mu-card  v-for="item,index in userDynamic"  :key="index">
+        <mu-card-header  :title="item[0].user_name"  :sub-title="item[0].user_signature">
           <mu-avatar slot="avatar">
-            <img  :src="item[0].user_avatar" >
+            <img   :src="item[0].user_avatar" >
           </mu-avatar>
           <!--加关注-->
-          <mu-button class="mu_add" textColor="red" @click="add_attention(index)"   v-if="!item[0].user_Befocused" round small >
+          <mu-button class="mu_add" textColor="red" @click="add_attention(item[0].user_name)"   v-if="!item[0].user_Befocused" round small >
             <mu-icon :size="20"  value="add" ></mu-icon>
             关注
           </mu-button>
           <!--加关注-->
           <!--更多-->
-          <mu-button icon ref="button" @click="toggle" class="mu_bu" >
-            <mu-icon :size="30" value="more_horiz"  color="＃212121"></mu-icon>
-          </mu-button>
+          <mu-menu  class="mu_bu">
+            <mu-button icon  >
+              <mu-icon :size="30" value="more_horiz"></mu-icon>
+            </mu-button>
+            <mu-list slot="content">
+              <mu-list-item button  @click="ts(index)">
+                <mu-icon :size="20"  value="warning" ></mu-icon>
+                <mu-list-item-title>举报</mu-list-item-title>
+              </mu-list-item>
+              <mu-list-item button>
+                <mu-icon :size="20"  value="turned_in_not" ></mu-icon>
+                <mu-list-item-title>收藏</mu-list-item-title>
+              </mu-list-item>
+            </mu-list>
+          </mu-menu>
           <!--更多-->
         </mu-card-header>
         <mu-card-text>
           {{item[0].user_substance}}
+          {{item[0].user_Befocused}}
         </mu-card-text>
         <mu-card-media>
-          <img  :src="item[0].user_photo"  class="images" :style="{width: widthData}" >
-          <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
-          <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
-          <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
-          <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
-          <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
-          <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
-          <img  :src="item[0].user_photo"   class="images" :style="{width: widthData}" >
+          <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+          <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
+          <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+          <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+          <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
+          <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+          <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+          <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
+          <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
         </mu-card-media>
         <mu-card-actions>
           <!--点赞-->
@@ -64,18 +78,12 @@ export default {
       num:5,
       refreshing: false,
       loading: false,
-      page: 1,
       icons:false,
-      scroller: null,
       open: false,
-      trigger: null,
-      icon_change:"favorite_border",
       add_show:true,
       userDynamic:[],
       testData:[],
-      sum:0,
-      likes:[],
-      leftTop: {horizontal: 'left', vertical: 'top'}
+      likes:[]
     }
   },
     props: {
@@ -86,8 +94,8 @@ export default {
     },
     created(){ //获取json对象
       var sum=0;
-      for(this.testData in TestData)
-      {
+     for(this.testData in TestData)
+     {
         this.userDynamic.push(TestData[this.testData]);
         sum++;
         if(sum==this.num)
@@ -95,30 +103,25 @@ export default {
           break;
         }
       }
-
-      this.widthData=100/8+"%";
+      this.widthData=100/9+"%";
     },
   mounted () {
-  /*  this.scroller = this.$el*/
-    this.trigger = this.$refs.button.$el;
   },
   methods: {
      ts() {
      },
-      add_attention(index) {
-      TestData[index][0].user_Befocused=true;
-      console.log(index);
+    add_attention(name) {
+         this.$store.dispatch('add_attention',name);
      },//点击加关注
-      refresh () {
+    refresh () {
       this.refreshing = true;
       this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.refreshing = false;
-      this.text = this.text === 'List' ? 'Menu' : 'List';
       this.num = 10;
     }, 2000)
     },//刷新
-      GetSum(){
+    GetSum(){
       var sum=0;
       for(this.testData in TestData)
       {
@@ -129,7 +132,7 @@ export default {
         }
       }
     },//获取加载更多的数量
-      load () {
+    load () {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
@@ -143,12 +146,6 @@ export default {
     click_turn(){
 
     },//收藏
-    toggle () {
-      this.open = !this.open
-    },
-    handleClose (e) {
-      this.open = false
-    }
     }
 };
 </script>
@@ -170,6 +167,15 @@ export default {
    top: 10px;
    clear:both;
  }
+ image[lazy=loading] {
+   width: 40px;
+   height: 300px;
+   margin: auto;
+ }
+.mu-card{
+  max-width: 750px;
+  margin: 0 auto;
+}
 
 </style>
 

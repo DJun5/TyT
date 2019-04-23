@@ -4,7 +4,7 @@
   height: 35px;
   position: absolute;
   right: 15px;
-  margin-top: -3px;
+  margin-top: -8px;
   z-index:100;
 }
 .mu_turned{
@@ -35,7 +35,7 @@
 }
 .mu_add{
   position: absolute;
-  right: 70px;
+  right:60px;
   z-index:100;
   box-shadow:none;
   border: 1px solid #ff2741;
