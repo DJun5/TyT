@@ -1,0 +1,120 @@
+.attentions{
+  position: absolute;
+  width: 100%;
+  height:100%;
+}
+.mu-paper{
+  height: 40%;
+  background-color:#fafafa;
+}
+.paper_header {
+  position:relative;
+  height: 30%;
+  width: 100%;
+}
+.paper_title{
+  position: absolute;
+  float: left;
+  font-family: "华文仿宋";
+  margin-top: 8px;
+  width: 200px;
+  height: 30px;
+  margin-left: 8px;
+}
+.paper_more{
+  position: absolute;
+  right: 10px;
+  width: 80px;;
+  margin-top: 8px;
+  z-index: 5;
+
+}
+.paper_avatar{
+  margin-left: 18px;
+  margin-top: 15px;
+}
+.paper_titles{
+  font-size:13px;
+  float: left;
+  margin-left:37px;
+}
+.paper_subtitle{
+  font-size:10px;
+  float: left;
+  margin-left: 16px;
+  color:#757575;
+}
+.paper_button{
+  border:1px solid transparent;
+  background-color:#ff2741;
+  font-size: 13px;
+  margin-top:135px;
+  border-radius:13px;
+  width: 80px;
+  text-align: center;
+  color: white;
+  height:25px;
+  margin-left: -77px;
+  position: absolute;
+}
+.attention_already{
+  border:1px solid transparent;
+  background-color:#bdbdbd;
+  font-size: 13px;
+  margin-top:135px;
+  border-radius:13px;
+  width: 80px;
+  height:25px;
+  text-align: center;
+  margin-left: -77px;
+  position: absolute;
+}
+.mu_right{
+  position: absolute;
+  margin-top: -3px;
+  margin-left: -4px;
+}
+.paper_scroll{
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+}
+.scroll_father{
+  position: absolute;
+  height: 180px;
+  margin-top: 35px;
+  width: 100%;
+  overflow: auto;
+  z-index:5;
+}
+.scroll_father::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
+  width: 0px;
+  height: 0px;
+}
+.demo-paper{
+  width: 110px;
+  height: 170px;
+  margin-left:8px;
+}
+.no_dynamic{
+
+  height: 18%;
+  text-align: center;
+}
+.no_dynamic_container{
+  position:absolute;
+  margin-top: 25px;
+  margin-left: -50px;
+}
+.no_dynamic_containers{
+  position:absolute;
+  margin-top: 50px;
+  margin-left: -70px;
+  color: #bdbdbd;
+}
+.clear_button{
+  position: absolute;
+  margin-left:72px;
+  margin-top:-10px;
+}
