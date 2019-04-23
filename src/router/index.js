@@ -12,6 +12,8 @@ import Settings from '@/components/Settings'
 import Login from '@/components/Login/login'
 import test from '@/components/test'
 import AddDynamic from '@/components/AddDynamic/addDynamic'
+import Address from '@/components/Message/Address'
+import Addfriend from '@/components/Message/Addfriend'
 Vue.use(VueRouter)
 
 const routes =  [
@@ -33,6 +35,18 @@ const routes =  [
       component: Message,
       meta: { keepAlive: true }
     },
+  {
+    path: '/message/address',
+    name: 'Address',
+    component: Address,
+
+  },
+  {
+    path: '/message/addfriend',
+    name: 'Addfriend',
+    component: Addfriend,
+
+  },
     {
       path: '/user',
       name: 'User',
