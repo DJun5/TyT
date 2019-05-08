@@ -9,7 +9,7 @@
 }
 .mu_turned{
   position: absolute;
-  color:#bdbdbd;
+  color:#ff2741;
   right: 20px;
   margin-top: -8px;
   z-index: 5;
@@ -40,8 +40,17 @@
   box-shadow:none;
   border: 1px solid #ff2741;
 }
-
-
+.images{
+  float: left;
+  min-width: 33%;
+  padding: 1px;
+  max-width: 100%;
+}
+image[lazy=loading] {
+  width: 40px;
+  height: 300px;
+  margin: auto;
+}
 
 
 

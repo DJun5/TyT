@@ -3,6 +3,7 @@
   <div class="framework">
     <!--头部-->
   <div class="header_wrap">
+
     <slot name="header">
         <!--设置为侧边栏-->
           <mu-button icon slot="left" v-if="has_menu && layout_type" @click="openMenu" >
@@ -26,6 +27,7 @@
       <!--分享和收藏（可扩展）-->
     </slot>
   </div>
+
     <!--头部-->
 
     <!--侧边栏-->
@@ -50,12 +52,14 @@
 
     <!--底部导航-->
   <div class="footer_wrap" v-if="has_footer && !layout_type">
-
       <mu-paper>
         <mu-bottom-nav :value="active_nav" @change="handleChange">
           <mu-bottom-nav-item  title="首页" icon="home" key="首页" value="/" />
           <mu-bottom-nav-item  title="大学" icon="school" key="大学" value="/Campus" />
-          <mu-bottom-nav-item  icon="add_box" class="mu-icon"   key="添加" value="/addDynamic" />
+        <!--  <mu-bottom-nav-item  icon="add_box" class="mu-icon"    />-->
+          <mu-button icon  key="添加" to="/addDynamic" >
+            <mu-icon :size="40" value="add_box"></mu-icon>
+          </mu-button>
           <mu-bottom-nav-item  title="消息" icon="message" key="消息" value="/Message" />
           <mu-bottom-nav-item  title="个人中心" icon="person" key="个人中心" value="/user" />
         </mu-bottom-nav>
@@ -87,7 +91,6 @@ export default {
       docked: false,
       layout_type: false,
       dialog: false,
-
     };
   },
   props: {
@@ -120,11 +123,9 @@ export default {
     this.setStatusBar();
   },
   methods: {
-
     openMenu() {
       this.open = !this.open;
     },
-
     goBack() {/*返回上一级*/
       if (this.leftAction) {
         this.leftAction.call(this.$parent);
@@ -145,8 +146,8 @@ export default {
       this.active_nav = path;
     },
     setStatusBar() { //设置主题颜色（状态栏）
-      let theme = Store.get('theme') || '';
-      let theme_color = '#00695c';
+      let theme ="def";
+      let theme_color = '#7E57C2';
       if (theme === 'def') {
         theme_color = '#7E57C2'
       }
@@ -203,13 +204,34 @@ export default {
     isCordova() {
       return this.$store.state.user.is_cordova;
     },
-  }
+  },
+  mounted() {
+    // 设置手机状态栏颜色
+   /* this.setStatusBar();*/
+  },
+  watch: {
+    // 页面切换过渡动画逻辑
+    '$route' (to, from) {
+      const toDepth = to.path.split('/').length;
+      const fromDepth = from.path.split('/').length;
+      if (toDepth === fromDepth) {
+        this.transitionName = 'slide-left';
+      }
+      if (toDepth > fromDepth) {
+        this.transitionName = 'slide-right-enter';
+      }
+      if (toDepth <fromDepth) {
+        this.transitionName = 'slide-left';
+      }
+    }
 
+
+  },
 };
 
 </script>
 <style scoped lang="less">
-.framework {
+  .framework {
   width: 100%;
   height: 100%;
   padding: 0px;
@@ -225,7 +247,7 @@ export default {
     width: 100%;
 }
 .mu-icon {
-  padding-top:15px;
+  top:5px;
   color:red;
 }
 </style>

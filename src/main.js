@@ -1,24 +1,20 @@
 import Vue from 'vue'
-import App from './App'
-import router from './router'
 import store from './vuex/store'
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
-import Store from 'storejs'
 import LazyLoad from 'mint-ui'
+import VueTouch from 'vue-touch'
+import App from './App'
+import Store from 'storejs'
+import router from './router'
+import Helpers from 'muse-ui/lib/Helpers'
 
+Vue.use(Helpers);
 Vue.use(LazyLoad);
 Vue.use(MuseUI);
 Vue.use(Store);
+Vue.use(VueTouch, {name: 'v-touch'});
 Vue.config.productionTip = false;
-
-/* eslint-disable no-new */
-Vue.filter('capitalize', function (value) {
-  if (!value) return '';
-  value = value.toString();
-  return value.charAt(0).toUpperCase() + value.slice(1)
-});
-
 new Vue({
   el: '#app',
   router,

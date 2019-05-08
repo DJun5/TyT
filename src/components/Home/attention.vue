@@ -1,9 +1,9 @@
 <template>
- <div class="attentions">
+ <div class="attentions"  ref="attention_srcoll">
    <div class="attention_header">
      <div class="add_dynamic" v-if="has_dynamic">
      <!--卡片展示-->
-       <mu-card  v-for="(item,index) in userDynamic" :key="item[0].user_name">
+       <mu-card  v-for="(item,index) in userDynamic" :key="index">
          <mu-card-header :title="item[0].user_name"  :sub-title="item[0].user_signature">
            <mu-avatar slot="avatar">
              <img   :src="item[0].user_avatar" >
@@ -58,7 +58,6 @@
        </mu-card>
        <!--卡片展示-->
    </div>
-
    </div>
    <!--没有关注的人时显示-->
    <div class="no_dynamic" v-if="!has_dynamic">
@@ -68,7 +67,7 @@
    <!--没有关注的人时显示-->
    <mu-paper>
      <!--横向滚动的头部-->
-     <div class="paper_header" >
+     <div class="paper_header"  v-if="!has_dynamic"  >
       <div class="paper_title">你可能感兴趣的用户</div>
      <div class="paper_more">
        <button  class="mu_more" @click="ts" >
@@ -78,11 +77,13 @@
      </div>
        <!--横向滚动块-->
        <div class="scroll_father" ref="paper_header">
+
        <div class="paper_scroll" ref="paper_scroll">
          <!--纸片展示“可能感兴趣的人”-->
+         <transition-group name="list-complete" >
          <mu-paper class="demo-paper" :z-depth="1" v-for=" interested_people,index in peopleInterested " :key="interested_people[0].client_name" >
              <!--清除按钮-->
-           <mu-button icon class="clear_button" @click="deletePeople(index)"  >
+           <mu-button icon class="clear_button"  @click="deletePeople(index)"  >
              <mu-icon value="clear" :size="18" color="#bdbdbd" ></mu-icon>
            </mu-button>
            <!--清除按钮-->
@@ -93,11 +94,12 @@
            <!--头像-->
          <span class="paper_titles">{{interested_people[0].client_name}}</span>
          <span class="paper_subtitle">{{interested_people[0].client_subtitle}}</span>
-         <mu-button flat  class="paper_button" @click="attention" v-if="attentioned" >关注</mu-button>
-           <mu-button flat class="attention_already"   v-if="!attentioned"  >已关注</mu-button>
+         <mu-button flat class="paper_button" @click="attention(index)"  >关注</mu-button>
        </mu-paper>
          <!--纸片展示“可能感兴趣的人”-->
+         </transition-group>
        </div>
+
      </div>
        <!--横向滚动块-->
      </div>
@@ -115,18 +117,20 @@
     data: function () {
       return {
         peopleInterested:[],
-        has_dynamic:false ,
+        has_dynamic:false,
         width:0,
         attentioned:true,
         likes:[],
+        userDynamic:[]
       }
     },
     created(){
+      this.userDynamic=TestData;
       this.peopleInterested=TetsData2;//获取到横向滚动的测试数据
       this.widthData=100/9+"%";
-      this.$nextTick(() => {//调用滚动方法
-         this.personScroll();
-    });
+     this.$nextTick(() => {//调用滚动方法
+        this.personScroll();
+   });
     },
     methods: {
       GetNum() {
@@ -155,13 +159,13 @@
       deletePeople(index) {
         this.width=120*Object.keys(this.peopleInterested).length;
         this.$delete(this.peopleInterested,index);
-      },//清楚感兴趣的人
+      },//清除感兴趣的人
       add_attention(index) {
-        TestData[index][0].user_Befocused=true;
-        console.log(index);
+
       },//点击加关注
-      attention() {
-        this.attentioned=false;
+      attention(index) {
+        this.$delete(this.peopleInterested,index);
+        console.log(index+"加关注");
       },//可能认识的人加关注,
       click_favorite(index){
         console.log(index)
@@ -171,15 +175,42 @@
     },
     watch:{
       width: function(){
-        this.personScroll();
+        this.GetNum();
+      this.personScroll();
       }//监听横滑动的宽度
-    }
+    },
+  /*  mounted () {
+      this.$nextTick(() => {
+
+        if(!this.scroll){
+        this.scroll = new BScroll(this.$refs.attention_srcoll, {
+          //开启点击事件 默认为false
+          click:true
+        })
+      }else if(!this.$refs.attention_srcoll){
+        return
+      }
+      else{
+        this.scroll.refresh()
+      }
+    })
+    },*/
   }
 </script>
 
 <style scoped lang="less">
   @import url('../../assets/less/common.less');
-  @import "../../assets/Css/Card.css";
+  @import "../../../static/css/Card.css";
+  .list-complete-enter, .list-complete-leave-to
+     {
+    opacity: 0;
+    transform: translateZ(30px);
+
+  }
+  .list-complete-leave-active {
+    position: absolute;
+
+  }
   image[lazy=loading] {
     width: 40px;
     height: 300px;
@@ -199,7 +230,13 @@
      position: absolute;
      width: 100%;
      height:100%;
+    overflow: auto;
+    z-index: 5;
    }
+  .attentions::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
+    width: 0px;
+    height: 0px;
+  }
   .mu-paper{
     height: 40%;
     background-color:#fafafa;
@@ -291,7 +328,7 @@
     margin-top: 35px;
     width: 100%;
     overflow: auto;
-    z-index:5;
+    z-index:1;
   }
   .scroll_father::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
     width: 0px;
@@ -300,7 +337,9 @@
   .demo-paper{
     width: 110px;
     height: 170px;
+    display: inline-block;
     margin-left:8px;
+    transition: all 1s;
   }
   .no_dynamic{
     height: 18%;
@@ -319,8 +358,10 @@
   }
   .clear_button{
     position: absolute;
-    margin-left:72px;
-    margin-top:-10px;
+    margin-left:80px;
+    width: 25px;
+     height: 25px;;
+    z-index:1;
   }
 </style>
 

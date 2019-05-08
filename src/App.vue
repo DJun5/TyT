@@ -5,9 +5,10 @@
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
     </transition>
-    <transition :name="transitionName">
+     <transition :name="transitionName">
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
+
   </div>
 </template>
 <script>
@@ -35,12 +36,11 @@ export default {
   },
   watch: {
     // 页面切换过渡动画逻辑
-    '$route' (to, from) {
+   /* '$route' (to, from) {
        const toDepth = to.path.split('/').length;
       const fromDepth = from.path.split('/').length;
-       console.log('toDepth: '+ toDepth + '\n fromDepth: ' + fromDepth);
       if (toDepth === fromDepth) {
-        this.transitionName = ' ';
+        this.transitionName = 'slide-left';
       }
       if (toDepth > fromDepth) {
         this.transitionName = 'slide-right-enter';
@@ -48,7 +48,7 @@ export default {
       if (toDepth <fromDepth) {
         this.transitionName = 'slide-left';
       }
-    }
+    }*/
 
 
   },
@@ -96,8 +96,7 @@ export default {
   transition: all 500ms;
   height: 100%;
   top:0;
-
-  position: absolute;
+  bottom: 500px;
   backface-visibility: hidden;
 
 }
@@ -115,6 +114,7 @@ export default {
 .slide-left-enter {
   opacity: 0;
   transform: translate3d(100%, 0, 0);
+
 }
 
 .slide-left-leave-active {

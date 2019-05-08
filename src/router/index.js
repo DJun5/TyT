@@ -14,6 +14,9 @@ import test from '@/components/test'
 import AddDynamic from '@/components/AddDynamic/addDynamic'
 import Address from '@/components/Message/Address'
 import Addfriend from '@/components/Message/Addfriend'
+import Attention from '@/components/Home/attention'
+import Find from '@/components/Home/find'
+import Detail from '@/components/Home/detail'
 Vue.use(VueRouter)
 
 const routes =  [
@@ -92,8 +95,24 @@ const routes =  [
     name: 'AddDynamic',
     component: AddDynamic,
     meta: { keepAlive: true }
+  },
+  {
+    path: '/find',
+    name: 'Find',
+    component: Find,
+    meta: { keepAlive: true }
+  },
+  {
+    path: '/attention',
+    name: 'Attention',
+    component: Attention,
+    meta: { keepAlive: true }
+  },
+  {
+    path: '/detail',
+    name: 'Detail',
+    component: Detail
   }
-
 
   ];
 

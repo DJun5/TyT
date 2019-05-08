@@ -1,20 +1,20 @@
 <template>
   <Layout :has_menu="false" :has_footer="false">
-    <div class="page_wrap">
+    <div class="page_wrap" slot="container">
       <div class="page_bd">
         <mu-list>
-          <mu-list-item title="使用侧边栏模式">
-            <mu-switch slot="right" label="" v-model="mod_switch" @change="modSwitch" />
-          </mu-list-item>
-          <mu-list-item title="主题色彩" @click="setTheme">
-            <mu-paper slot="right" class="paper" circle :zDepth="1" />
+          <mu-list-item button :ripple="false" @click="setTheme" >
+            <mu-list-item-action>
+              <mu-icon value="grade"></mu-icon>
+            </mu-list-item-action>
+            <mu-list-item-title>主题色彩</mu-list-item-title>
           </mu-list-item>
         </mu-list>
         <mu-dialog :open="dialog" title="选择主题">
           <span v-for="(item, i) in themes" @click="changeTheme(i)">
                 <mu-paper class="themes_paper" circle :zDepth="1" :class="`themes_${i}`"></mu-paper>
             </span>
-          <mu-flat-button slot="actions" @click="closeDialog" primary label="关闭" />
+          <mu-button slot="actions" flat color="primary"@click="closeDialog">关闭</mu-button>
         </mu-dialog>
       </div>
     </div>
@@ -25,13 +25,11 @@ let _self;
 import Layout from '@/components/Layout';
 import { Toast } from 'mint-ui';
 import Store from 'storejs'
-
 import def from '!raw-loader!muse-ui/dist/theme-default.css';
 import light from '!raw-loader!muse-ui/dist/theme-light.css';
 import dark from '!raw-loader!muse-ui/dist/theme-dark.css';
 import carbon from '!raw-loader!muse-ui/dist/theme-carbon.css';
 import teal from '!raw-loader!muse-ui/dist/theme-teal.css';
-
 export default {
   data: function() {
     return {

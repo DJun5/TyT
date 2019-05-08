@@ -1,11 +1,11 @@
 <template>
-    <Layout :has_share="false">
+    <Layout :has_share="false"  >
       <mu-appbar class="app_bar" :z-depth="1" slot="header">
         <!--上部Tabs-->
         <mu-tabs :value="active1" center    class="tabs"  @change="handleChange"   >
-          <mu-tab value=0 >关注</mu-tab>
-          <mu-tab value=1 >发现</mu-tab>
-          <mu-tab value=2 >推荐</mu-tab>
+          <mu-tab value="attention" >关注</mu-tab>
+          <mu-tab value="find" >发现</mu-tab>
+          <mu-tab value="recommend">推荐</mu-tab>
         </mu-tabs>
         <!--上部Tabs-->
        <!--搜索框-->
@@ -16,25 +16,31 @@
         <!--搜索框-->
       </mu-appbar>
       <!--主内容-->
-      <div class="containers" slot="container" >
+
+
+      <div class="containers" slot="container">
+
+        <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight" class="trams" >
          <!--关注-->
-          <div class="content" v-if="active1==0" >
+
+          <div class="content" v-if="active1=='attention'" >
             <Attention/>
           </div>
         <!--关注-->
-
         <!--发现-->
-          <div class="content" v-if="active1==1" >
+          <div class="content" v-if="active1=='find'" >
             <Find/>
           </div>
         <!--发现-->
         <!--推荐-->
-          <div class="content" v-if="active1==2" >
+          <div class="content" v-if="active1=='recommend'" >
             <Recommend/>
           </div>
+          </v-touch>
         <!--推荐-->
 
-         </div>
+        </div>
+
       <!--主内容-->
     </Layout>
 </template>
@@ -44,26 +50,44 @@ import Layout from '@/components/Layout';
 import Find from '@/components/Home/find';
 import Attention from '@/components/Home/attention';
 import Recommend from '@/components/Home/recommend';
+
 export default {
     data: function() {
         return {
           loading: 'init',
-          tvs: [],
-          trigger: null,
-          active1: '1'
+          active1: "find"
         }
     },
     created() {
         _self = this;
     },
     mounted() {
-        this.trigger = this.$el
+
     },
     methods: {
-      handleChange(val) { //改变选中状态
+      handleChange(val) {
         this.active1 = val;
         console.log(val);
-      }
+      }, //改变选中状态
+      onSwipeLeft: function () {
+       if(this.active1=="find")
+        {
+          this.active1 = "recommend";
+        }
+       else if(this.active1=="attention"){
+         this.active1="find";       }
+      },//左滑动
+      onSwipeRight: function () {
+        if(this.active1=='find') {
+          this.active1 = 'attention';
+        }
+        else if(this.active1=="recommend")
+        {
+          this.active1="find";
+        }
+
+      },//右滑动
+
     },
     computed: {
         getLoading() {
@@ -86,6 +110,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 @import url('../../assets/less/common.less');
+
 .app_bar{
   position: relative;
   width: 100%;
@@ -95,12 +120,12 @@ export default {
   width:100%;
   position: absolute;
   height: 80%;
+  top:82px;
+  bottom: 55px;
   overflow: auto;
+
 }
-.containers::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
-  width: 0px;
-  height: 0px;
-}
+
 
 .mu-appbar {
   background-color:transparent;
@@ -126,8 +151,7 @@ export default {
   position: absolute;
   margin-top: 5px;
   width:92%;
-  height: 200px;
-
+  height: 26px;
 }
 .mu-icons{
   z-index: 1;
@@ -145,13 +169,13 @@ export default {
   font-size: 15px;
   border-radius: 15px;
 }
-
 .mu-tab{
   color: #bdbdbd;
 }
 .mu-tab-active {
   color: black;
-
 }
-
+.mu-tab-link-highlight{
+  width: 50px;
+}
 </style>
