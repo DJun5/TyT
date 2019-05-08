@@ -56,7 +56,11 @@
           <mu-bottom-nav-item  title="首页" icon="home" key="首页" value="/" />
           <mu-bottom-nav-item  title="大学" icon="school" key="大学" value="/Campus" />
           <mu-bottom-nav-item  icon="add_box" class="mu-icon"   key="添加" value="/addDynamic" />
+
+          <mu-badge content="12" circle color="secondary"  class="demo-icon-badge">
           <mu-bottom-nav-item  title="消息" icon="message" key="消息" value="/Message" />
+          </mu-badge>
+
           <mu-bottom-nav-item  title="个人中心" icon="person" key="个人中心" value="/user" />
         </mu-bottom-nav>
       </mu-paper>
@@ -228,4 +232,6 @@ export default {
   padding-top:15px;
   color:red;
 }
+
+
 </style>

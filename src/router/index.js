@@ -14,6 +14,8 @@ import test from '@/components/test'
 import AddDynamic from '@/components/AddDynamic/addDynamic'
 import Address from '@/components/Message/Address'
 import Addfriend from '@/components/Message/Addfriend'
+import Chat from '@/components/Message/Chat'
+import Vie from '@/components/Message/Vie'
 Vue.use(VueRouter)
 
 const routes =  [
@@ -45,7 +47,16 @@ const routes =  [
     path: '/message/addfriend',
     name: 'Addfriend',
     component: Addfriend,
-
+  },
+  {
+    path: '/message/chat',
+    name: 'Chat',
+    component: Chat,
+  },
+  {
+    path: '/message/vie',
+    name: 'Vie',
+    component: Vie,
   },
     {
       path: '/user',

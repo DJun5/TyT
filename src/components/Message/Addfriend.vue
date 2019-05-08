@@ -1,9 +1,21 @@
 <template>
     <!--搜索导航-->
-  <mu-appbar >
-    <mu-icon-button  @click="address" icon="keyboard_backspace" slot="left"/>
-    <mu-text-field icon="search" class="appbar-search-field"  slot="right" hintText="输入昵称或账号"/>
+
+
+
+
+
+  <mu-appbar style="width: 100%;" color="primary">
+    <mu-button icon slot="left" @click="address">
+      <mu-icon value="keyboard_backspace"  ></mu-icon>
+    </mu-button>
+    <mu-text-field icon="search" class="appbar-search-field"
+                   slot="right" hintText="snvjsdfjskd"/>
   </mu-appbar>
+
+
+
+
 </template>
 
 <script>
