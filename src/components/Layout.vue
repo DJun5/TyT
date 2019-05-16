@@ -57,7 +57,7 @@
           <mu-bottom-nav-item  title="首页" icon="home" key="首页" value="/" />
           <mu-bottom-nav-item  title="大学" icon="school" key="大学" value="/Campus" />
         <!--  <mu-bottom-nav-item  icon="add_box" class="mu-icon"    />-->
-          <mu-button icon  key="添加" to="/addDynamic" >
+          <mu-button icon :ripple="false" key="添加" to="/addDynamic" >
             <mu-icon :size="40" value="add_box"></mu-icon>
           </mu-button>
           <mu-bottom-nav-item  title="消息" icon="message" key="消息" value="/Message" />

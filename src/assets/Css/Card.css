@@ -9,14 +9,14 @@
 }
 .mu_turned{
   position: absolute;
-  color:#ff2741;
+  color:#bdbdbd;
   right: 20px;
   margin-top: -8px;
   z-index: 5;
 }
 .mu_favorite{
   margin-left:2% ;
-  z-index:200;
+  z-index:100;
   color:#ff2741;
   margin-top: -22px;
 }
@@ -40,17 +40,8 @@
   box-shadow:none;
   border: 1px solid #ff2741;
 }
-.images{
-  float: left;
-  min-width: 33%;
-  padding: 1px;
-  max-width: 100%;
-}
-image[lazy=loading] {
-  width: 40px;
-  height: 300px;
-  margin: auto;
-}
+
+
 
 
 

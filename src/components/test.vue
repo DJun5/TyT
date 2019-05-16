@@ -17,7 +17,6 @@
 </template>
 <script>
 let _self;
-
 export default {
   data() {
     return {
@@ -53,12 +52,12 @@ export default {
         // 如果是向右滑动或者不滑动，不改变滑块的位置
         if (this.disX < 0 || this.disX == 0) {
           this.deleteSlider = "transform:translateX(0px)";
-          // 大于0，表示左滑了，此时滑块开始滑动 
+          // 大于0，表示左滑了，此时滑块开始滑动
         } else if (this.disX > 0) {
           //具体滑动距离我取的是 手指偏移距离*5。
           this.deleteSlider = "transform:translateX(-" + this.disX * 5 + "px)";
 
-          // 最大也只能等于删除按钮宽度 
+          // 最大也只能等于删除按钮宽度
           if (this.disX * 5 >= wd) {
             this.deleteSlider = "transform:translateX(-" + wd + "px)";
 

@@ -23,13 +23,13 @@
 <script>
 let _self;
 import Layout from '@/components/Layout';
-import { Toast } from 'mint-ui';
-import Store from 'storejs'
-import def from '!raw-loader!muse-ui/dist/theme-default.css';
-import light from '!raw-loader!muse-ui/dist/theme-light.css';
-import dark from '!raw-loader!muse-ui/dist/theme-dark.css';
-import carbon from '!raw-loader!muse-ui/dist/theme-carbon.css';
-import teal from '!raw-loader!muse-ui/dist/theme-teal.css';
+    import { Toast } from 'mint-ui';
+    import Store from 'storejs'
+    import def from '!raw-loader!muse-ui/dist/theme-default.css';
+    import light from '!raw-loader!muse-ui/dist/theme-light.css';
+    import dark from '!raw-loader!muse-ui/dist/theme-dark.css';
+    import carbon from '!raw-loader!muse-ui/dist/theme-carbon.css';
+    import teal from '!raw-loader!muse-ui/dist/theme-teal.css';
 export default {
   data: function() {
     return {

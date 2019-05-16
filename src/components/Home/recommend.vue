@@ -16,7 +16,7 @@
             <!--加关注-->
             <!--更多-->
             <mu-menu  class="mu_bu">
-              <mu-button icon  >
+              <mu-button  :ripple="false" icon  >
                 <mu-icon :size="30" value="more_horiz"></mu-icon>
               </mu-button>
               <mu-list slot="content">
@@ -49,19 +49,19 @@
           </mu-card-media>
           <mu-card-actions>
             <!--点赞-->
-            <mu-checkbox  v-model="likes" :value="item[0].user_name" @change="click_favorite(item[0].user_name)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
+            <mu-checkbox  :ripple="false"  v-model="likes" :value="item[0].user_name" @change="click_favorite(item[0].user_name)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
             <!--评论-->
-            <mu-button icon class="mu_textsms" @click="ts" >
+            <mu-button  :ripple="false" icon class="mu_textsms" @click="ts" >
               <mu-icon :size="22" value="textsms" ></mu-icon>
             </mu-button>
             <!--评论-->
             <!--分享-->
-            <mu-button icon  class="mu_share" @click="ts">
+            <mu-button  :ripple="false" icon  class="mu_share" @click="ts">
               <mu-icon :size="22" value="share"  ></mu-icon>
             </mu-button>
             <!--分享-->
             <!--收藏-->
-            <mu-checkbox v-model="collect"   :value="item[0].user_name" @change="click_turn(item[0].user_name)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
+            <mu-checkbox  :ripple="false" v-model="collect"   :value="item[0].user_name" @change="click_turn(item[0].user_name)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
             <!--收藏-->
           </mu-card-actions>
         </mu-card>
@@ -71,7 +71,6 @@
 </template>
 <script>
   import TestData from "../../../static/Json/TestData.json";
-  import BScroll from 'better-scroll';
   export default {
     data: function() {
        return{
@@ -100,20 +99,6 @@
       this.widthData=100/9+"%";
     },
     mounted () {
-      this.$nextTick(() => {
-
-        if(!this.scroll){
-        this.scroll = new BScroll(this.$refs.container, {
-          //开启点击事件 默认为false
-          click:true
-        })
-      }else if(!this.$refs.container){
-        return
-      }
-      else{
-        this.scroll.refresh()
-      }
-    })
     },
     methods: {
       ts() {
@@ -174,8 +159,6 @@
     overflow: auto;
     z-index: 1;
     position: absolute;
-    -webkit-overflow-scrolling: touch
-
   }
   .re_container::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
     width: 0px;

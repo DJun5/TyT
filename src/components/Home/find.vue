@@ -16,7 +16,7 @@
           <!--加关注-->
           <!--更多-->
           <mu-menu  class="mu_bu">
-            <mu-button icon  >
+            <mu-button icon  :ripple="false" >
               <mu-icon :size="30" value="more_horiz"></mu-icon>
             </mu-button>
             <mu-list slot="content">
@@ -49,19 +49,19 @@
         </mu-card-media>
         <mu-card-actions>
           <!--点赞-->
-          <mu-checkbox  v-model="likes" :value="item[0].user_name" @change="click_favorite(item[0].user_name)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
+          <mu-checkbox  :ripple="false" v-model="likes" :value="item[0].user_name" @change="click_favorite(item[0].user_name)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
           <!--评论-->
-          <mu-button icon class="mu_textsms" @click="comment(index)" >
+          <mu-button icon  :ripple="false"   class="mu_textsms" @click="comment(index)" >
             <mu-icon :size="22" value="textsms" ></mu-icon>
           </mu-button>
           <!--评论-->
           <!--分享-->
-          <mu-button icon  class="mu_share" @click="ts">
+          <mu-button icon  :ripple="false" class="mu_share" @click="ts">
             <mu-icon :size="22" value="share"  ></mu-icon>
           </mu-button>
           <!--分享-->
           <!--收藏-->
-          <mu-checkbox v-model="collect"   :value="item[0].user_name" @change="click_turn(item[0].user_name)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
+          <mu-checkbox  :ripple="false" v-model="collect"   :value="item[0].user_name" @change="click_turn(item[0].user_name)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
           <!--收藏-->
         </mu-card-actions>
       </mu-card>
@@ -73,7 +73,6 @@
 <script>
 let _self;
 import TestData from "../../../static/Json/TestData.json";
-import BScroll from 'better-scroll';
 export default {
   data: function() {
     return {
@@ -89,47 +88,28 @@ export default {
       collect:[]
     }
   },
-    props: {
-        media: {
-            type: Array,
-            require: true
-        },
-    },
     created(){ //获取json对象
-      var sum=0;
-     for(this.testData in TestData)
-     {
-        this.userDynamic.push(TestData[this.testData]);
-        sum++;
-        if(sum==this.num)
-        {
-          break;
-        }
-      }
 
-
-      this.widthData=100/9+"%";
     },
   mounted () {
-    this.$nextTick(() => {
-      if(!this.scroll){
-      this.scroll = new BScroll(this.$refs.container, {
-        //开启点击事件 默认为false
-        click:true
-      })
-    }else if(!this.$refs.container){
-      return
+    var sum=0;
+    for(this.testData in TestData)
+    {
+      this.userDynamic.push(TestData[this.testData]);
+      sum++;
+      if(sum==this.num)
+      {
+        break;
+      }
     }
-    else{
-      this.scroll.refresh()
-    }
-  })
+    this.widthData=100/9+"%";
   },
   methods: {
      ts() {
      },
     add_attention(name) {
          this.$store.dispatch('add_attention',name);
+         console.log(name);
      },//点击加关注
     refresh () {
       this.refreshing = true;
@@ -149,7 +129,7 @@ export default {
       }
       console.log(this.userDynamic);
     },//获取加载更多的数量
-    load (){
+    load(){
       this.loading = true;
       setTimeout(() => {
         this.loading= false;
@@ -176,7 +156,6 @@ export default {
       this.$router.push('/detail');
     }
 
-
     }
 };
 </script>
@@ -191,9 +170,8 @@ export default {
   position: absolute;
   z-index:1;
   overflow: auto;
-  top:0px;
-  bottom:10px; /*关键*/
-  -webkit-overflow-scrolling: touch
+  top:0;
+  bottom:20px; /*关键*/
 }
  .card_first::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
    width: 0px;

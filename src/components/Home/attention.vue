@@ -40,19 +40,19 @@
          </mu-card-media>
          <mu-card-actions>
            <!--点赞-->
-           <mu-checkbox  v-model="likes" :value="'favorite'+index" @change="click_favorite(index)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
+           <mu-checkbox  :ripple="false"  v-model="likes" :value="'favorite'+index" @change="click_favorite(index)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
            <!--评论-->
-           <mu-button icon class="mu_textsms" @click="ts" >
+           <mu-button  :ripple="false" icon class="mu_textsms" @click="ts" >
              <mu-icon :size="22" value="textsms" ></mu-icon>
            </mu-button>
            <!--评论-->
            <!--分享-->
-           <mu-button icon  class="mu_share" @click="ts">
+           <mu-button  :ripple="false" icon  class="mu_share" @click="ts">
              <mu-icon :size="22" value="share"  ></mu-icon>
            </mu-button>
            <!--分享-->
            <!--收藏-->
-           <mu-checkbox v-model="likes"   :value="'turned'+index" @change="click_turn"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
+           <mu-checkbox  :ripple="false" v-model="likes"  :value="'turned'+index" @change="click_turn"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
            <!--收藏-->
          </mu-card-actions>
        </mu-card>
@@ -65,7 +65,7 @@
      <span class="no_dynamic_containers">看看大家都在关注那些人吧！</span>
    </div>
    <!--没有关注的人时显示-->
-   <mu-paper>
+   <mu-paper  >
      <!--横向滚动的头部-->
      <div class="paper_header"  v-if="!has_dynamic"  >
       <div class="paper_title">你可能感兴趣的用户</div>
@@ -76,14 +76,14 @@
        </button>
      </div>
        <!--横向滚动块-->
-       <div class="scroll_father" ref="paper_header">
+       <div class="scroll_father stop-swiping" ref="paper_header" >
 
        <div class="paper_scroll" ref="paper_scroll">
          <!--纸片展示“可能感兴趣的人”-->
          <transition-group name="list-complete" >
          <mu-paper class="demo-paper" :z-depth="1" v-for=" interested_people,index in peopleInterested " :key="interested_people[0].client_name" >
              <!--清除按钮-->
-           <mu-button icon class="clear_button"  @click="deletePeople(index)"  >
+           <mu-button  :ripple="false" icon class="clear_button"  @click="deletePeople(index)"  >
              <mu-icon value="clear" :size="18" color="#bdbdbd" ></mu-icon>
            </mu-button>
            <!--清除按钮-->
@@ -145,8 +145,7 @@
             startX: 0,
             click: true,
             scrollX: true,
-            scrollY: false,
-            eventPassthrough: "vertical"
+            scrollY: false
           });
         } else {
           this.scroll.refresh();
@@ -240,6 +239,7 @@
   .mu-paper{
     height: 40%;
     background-color:#fafafa;
+
   }
 
   .paper_header {

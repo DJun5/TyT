@@ -36,11 +36,11 @@ export default {
   },
   watch: {
     // 页面切换过渡动画逻辑
-   /* '$route' (to, from) {
+    '$route' (to, from) {
        const toDepth = to.path.split('/').length;
       const fromDepth = from.path.split('/').length;
       if (toDepth === fromDepth) {
-        this.transitionName = 'slide-left';
+        this.transitionName = '';
       }
       if (toDepth > fromDepth) {
         this.transitionName = 'slide-right-enter';
@@ -48,7 +48,7 @@ export default {
       if (toDepth <fromDepth) {
         this.transitionName = 'slide-left';
       }
-    }*/
+    }
 
 
   },

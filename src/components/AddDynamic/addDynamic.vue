@@ -6,13 +6,13 @@
           取消
         </mu-button>
         <span class="mu_text">动态</span>
-          <mu-button class="mu-issue" round slot="right" >
+          <mu-button class="mu-issue"   :disabled="If_show"  round slot="right" >
           发表
         </mu-button>
       </mu-appbar>
       </mu-paper>
       <div class="content">
-        <mu-text-field v-model="textarea" solo :placeholder="text_hint"  multi-line :rows="4" full-width></mu-text-field>
+        <mu-text-field v-model="textarea" solo :placeholder="text_hint"   multi-line :rows="4" full-width></mu-text-field>
         <UpLoad @getFiles='getImageList' @removeFiles='removeImage'></UpLoad>
       </div>
       <mu-divider></mu-divider>
@@ -29,7 +29,8 @@ export default {
         return {
           text_hint:'你是小可爱,你说的都对.....',
           imgList:[],
-          textarea: ''
+          textarea: '',
+          If_show:true
         };
     },
     created() {
@@ -40,6 +41,15 @@ export default {
     },
     methods: {
       GoBack(){
+        if (this.leftAction) {
+          this.leftAction.call(this.$parent);
+        } else {
+          if (history.length > 1) {
+            this.$router.go(-1);
+          } else {
+            this.$router.push('/');
+          }
+        }
 
       },
       getImageList(files) {
@@ -60,8 +70,15 @@ export default {
       },
     },
     computed: {
-
     },
+  watch:{
+    textarea(){
+      if(this.textarea.length==0)
+           this.If_show=true;
+      else
+          this.If_show=false
+    }
+  },
     components: {
         Layout,
         UpLoad
@@ -101,7 +118,6 @@ export default {
   }
   .mu-issue{
     box-shadow: none;
-    border: 1px solid #ff2741;
     background-color: #ff2741;
     color: white;
     min-width: 52px;
