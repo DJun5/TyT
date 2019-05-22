@@ -34,13 +34,12 @@
                     <mu-list-item-action>
                       <mu-icon value="add_a_photo" color="blue"></mu-icon>
                     </mu-list-item-action>
-                    <mu-list-item-title>拍摄</mu-list-item-title>
-                    <input type="file" accept="image/*" capture="camera">
+                    <mu-list-item-title >拍摄</mu-list-item-title>
+                       <input type="file" accept="image/*" capture="camera"  @change="selectImgs($event)" >
                   </mu-list-item>
                 </mu-list>
               </mu-bottom-sheet>
               <!---------上传照片的边框显示--------->
-
             </div>
 
           <!-- PhotoSwipe插件需要的元素， 一定要有类名 pswp -->
@@ -94,7 +93,9 @@ export default {
       index: 0, // 序列号
       maxLength: 9, // 图片最大数量
       maxSize: 10240000, //图片限制为10M内
-      open: false
+      open: false,
+
+      messages:""
     };
   },
   methods: {

@@ -1,7 +1,8 @@
 <template>
-  <div class="card_first" ref="container">
+  <div  class="card_first" id="card" ref="container">
     <div>
-    <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...." :loading="loading" @load="load">
+
+    <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...."  :loading="loading" @load="load">
     <!--卡片展示-->
       <mu-card  v-for="item,index in userDynamic"  :key="index">
         <mu-card-header  :title="item[0].user_name"  :sub-title="item[0].user_signature">
@@ -37,15 +38,7 @@
           {{item[0].user_Befocused}}
         </mu-card-text>
         <mu-card-media>
-          <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-          <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-          <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-          <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-          <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-          <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-          <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-          <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-          <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+          <img  v-for="imageIndex,count in imagelist"   src="../../assets/images/a.jpeg"   :key="count"  class="images" :style="{width:100/imagelist.length+'%'}" >
         </mu-card-media>
         <mu-card-actions>
           <!--点赞-->
@@ -67,11 +60,20 @@
       </mu-card>
       </mu-load-more>
     <!--卡片展示-->
-    </div>
+      <!---------返回顶部--------------->
+      <div class="back_top" v-if="back_show">
+        <mu-button fab  :ripple="false" color="teal"     @click="BackTop">
+          <mu-icon  value="keyboard_arrow_up" color="white" :size="24"  ></mu-icon>
+        </mu-button>
+      </div>
+      <!---------返回顶部--------------->
+      <!---->
+
+      <!---->
+</div>
 </div>
 </template>
 <script>
-let _self;
 import TestData from "../../../static/Json/TestData.json";
 export default {
   data: function() {
@@ -83,51 +85,61 @@ export default {
       open: false,
       add_show:true,
       userDynamic:[],
-      testData:[],
       likes:[],
-      collect:[]
+      collect:[],
+      back_show:false,
+      imagelist:[
+        {"src":"../../assets/images/a.jpeg"},
+        {"src":"../../assets/images/a.jpeg"}
+      ]
     }
   },
     created(){ //获取json对象
-
+     this.GetData();
     },
   mounted () {
-    var sum=0;
-    for(this.testData in TestData)
-    {
-      this.userDynamic.push(TestData[this.testData]);
-      sum++;
-      if(sum==this.num)
-      {
-        break;
-      }
-    }
-    this.widthData=100/9+"%";
+      window.addEventListener('scroll', this.onScroll,true);
   },
   methods: {
      ts() {
      },
+    BackTop(){
+      this.$refs.container.scrollTop = 0;
+    },
+    GetData(){
+      var sum=0;
+      for(var testData in TestData)
+      {
+        this.userDynamic.push(TestData[testData]);
+        sum++;
+        if(sum==this.num)
+        {
+          break;
+        }
+      }
+      this.widthData=100/9+"%";
+    },//获取数据
     add_attention(name) {
          this.$store.dispatch('add_attention',name);
          console.log(name);
      },//点击加关注
     refresh () {
       this.refreshing = true;
-      this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.refreshing = false;
-      this.num = 10;
+        this.num = 5;
+      this.GetData();
     }, 2000)
     },//刷新
     GetSum(){
       var sum=0;
-      for(this.testData in TestData) {
-        this.userDynamic[sum++] = (TestData[this.testData]);
+      for(var  testData in TestData) {
+        this.userDynamic[sum++] = (TestData[testData]);
         if (sum >= this.num) {
           break;
         }
+
       }
-      console.log(this.userDynamic);
     },//获取加载更多的数量
     load(){
       this.loading = true;
@@ -154,10 +166,25 @@ export default {
     },//收藏
     comment(index){
       this.$router.push('/detail');
-    }
+    },
+    onScroll(){
+      let scrollTop = document.getElementById('card').scrollTop;
+      if(scrollTop>=2000)
+      {
+        this.back_show=true;
+      }
+      else {
+        this.back_show=false;
+
+      }
 
     }
-};
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.onScroll)
+  }
+    }
+
 </script>
 <style scoped lang="less">
  @import url('../../assets/less/common.less');
@@ -168,9 +195,10 @@ export default {
 .card_first {
   width: 100%;
   position: absolute;
-  z-index:1;
+  z-index:200;
   overflow: auto;
   top:0;
+  left:0 ;
   bottom:20px; /*关键*/
 }
  .card_first::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
@@ -196,6 +224,12 @@ export default {
 .mu-card{
   max-width: 750px;
   margin: 0 auto;
+}
+.back_top{
+    position:fixed;
+    z-index:10000;
+    top:82%;
+    right:5%;
 }
 
 </style>

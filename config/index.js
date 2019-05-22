@@ -9,6 +9,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: './', // 本地打包
     productionSourceMap: false, // 是否生成.map文件
+   /*  index: path.resolve(__dirname, '../../www/index.html'),
+        assetsRoot: path.resolve(__dirname, '../../www'),
+        assetsSubDirectory: 'static',
+        assetsPublicPath: '', // 本地打包
+        productionSourceMap: true, // 是否生成.map文件
+*/
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -27,13 +33,13 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+  /*  assetsPublicPath: '',*/
     proxyTable: {
         '/api': {
-            // target: 'https://www.ifilm.ltd',
-            target: 'http://m.mtime.cn/Service/callback.mi',
+            target: 'http://10.127.0.60:1013',
             changeOrigin: true,
             pathRewrite: {
-                '^/api': '',
+                '^/api': '/'
             }
         },
     },

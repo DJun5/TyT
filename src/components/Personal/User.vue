@@ -13,6 +13,11 @@
           <mu-avatar class="avatar" :size="52" @click="ToLogin">
             <img src="../../assets/images/a.jpeg">
           </mu-avatar>
+          <mu-button icon class="bu_title"  >
+            <mu-icon class="title_left" value=":iconfont icon-qingtonghuiyuan" color="#ea986c" :size="18" ></mu-icon>
+              <span class="title_text">青铜选手</span>
+             <span class="title_right"><mu-icon  value="chevron_right" :size="26"  slot="left" color="white"></mu-icon></span>
+          </mu-button>
             <div class="right">
               <div  class="menu" >
               <div class="list_menu" v-for="item in menu_list" :key="item.text" >
@@ -31,16 +36,15 @@
             <mu-tab value="like">喜欢{{love_num}}</mu-tab>
             <mu-tab value="collect">收藏{{collect_num}}</mu-tab>
           </mu-tabs>
-          <div class="menu_content" ref="container" >
+          <div  class="menu_content" ref="container" >
             <div class="swiper-container" id="swiper_menu" ref="myswiper"  >
               <div class="swiper-wrapper">
-
 
                   <div class="swiper-slide slidepage"  >
                     <div class="swiper-container scroll">
                       <div class="swiper-wrapper">
                         <div class="swiper-slide slidescroll">
-                          <Display :user_dynamic="user_dynamic" ></Display>
+                          <Display :type="user_dynamic" ></Display>
                         </div>
                       </div>
                     </div>
@@ -50,7 +54,7 @@
                   <div class="swiper-container scrolls">
                     <div class="swiper-wrapper">
                       <div class="swiper-slide slidescroll">
-                        <Display :user_dynamic="user_like" ></Display>
+                        <Display type="like" ></Display>
                       </div>
                     </div>
                   </div>
@@ -60,7 +64,7 @@
                   <div class="swiper-container scroll">
                     <div class="swiper-wrapper">
                       <div class="swiper-slide slidescroll">
-                        <Display :user_dynamic="user_collect" ></Display>
+                        <Display type="collect" ></Display>
                       </div>
                     </div>
                   </div>
@@ -69,8 +73,10 @@
               </div>
             </div>
           </div>
+
         </div >
         <!-----功能区------->
+
       </div>
     </div>
   </Layout>
@@ -94,29 +100,28 @@ export default {
           love_num:0,
           collect_num:0,
           active:"dynamic",
-          user_dynamic:[],
-          user_like:[],
-          user_collect:[]
+          user_dynamic:"dynamics",
+          loading:true
         };
     },
     created() {
-        _self = this;
-      var jsonLength = 0;
-      for (var i in TestData) {
-        jsonLength++;
-      }
+     this.GetData();
+    },
+    mounted() {
+        this.swiper_page();
+        this.swiper_scroll();
+    },
+    methods: {
+      GetData(){
+        var jsonLength = 0;
+        for (var i in TestData) {
+          jsonLength++;
+        }
         this.collect_num=jsonLength;
         this.love_num=jsonLength;
         this.dynamic_num=jsonLength;
-       this.user_dynamic=TestData;
-    },
-    mounted() {
-      this.$nextTick(() =>{
-        this.swiper_page()
-        this.swiper_scroll()
-      })
-    },
-    methods: {
+        this.loading=false;
+      },
       ToLogin(){
         this.$router.push("/login");
       },//跳转登录界面
@@ -137,16 +142,6 @@ export default {
                 _this.active = "collect";
               }
             },//滑动tab相应切换
-            transitionEnd:function(){
-               if(this.realIndex==1){
-               _this.user_like=TestData
-              }
-              else if(this.realIndex==2){
-
-                _this.user_collect =TestData;
-
-              }
-            },//滑动结束时，加载数据
           }
         });
       },//创建横向滑动的swiper
@@ -167,15 +162,13 @@ export default {
           this.swiper.slideTo(0,0,false);
         else if(val=="like")
         {
-          this.swiper.slideTo(1,0,false);
-          this.user_like=TestData;
-        }
 
+          this.swiper.slideTo(1,0,false);
+        }
         else if(val=="collect")
         {
-          this.user_collect=TestData;
-          this.swiper.slideTo(2,0,false);
 
+          this.swiper.slideTo(2,0,false);
         }
       } , //改变选中状态
       ToSetting(){
@@ -185,7 +178,14 @@ export default {
     computed: {
         swiper(){
          return  this.$refs.myswiper.swiper;
-        }//全局使用swiper对象
+        }, //全局使用swiper对象
+      getLoading() {
+        if (this.loading === 'loaded') {
+          return true;
+        } else {
+          return false;
+        }
+      }
     },
     components: {
         Layout,
@@ -244,14 +244,16 @@ export default {
     margin-top: 120px;
     overflow: hidden;
     transform: skewY(-10deg) translate(20px,-190px);
-    background: url("../../assets/images/ts.jpg");
-    background-size: cover;
+    background: url("../../assets/images/ts.jpg") no-repeat;
+    background-size:cover;
+
+
   }
   .center{
     width: 100%;
-    height: 69%;
+    height: 67%;
     position: absolute;
-    bottom: 15px;
+    bottom: 25px;
   }
   .ur_name{
     position: absolute;
@@ -293,6 +295,30 @@ export default {
   .menu_content{
     width: 100%;
     height: 80%;
+  }
+  .bu_title{
+    top:11%;
+    left:12%;
+    position: absolute;
+    z-index: 99;
+    background-color:#e0e0e0;
+    width: 30%;
+    height:0;
+    border-radius:20px;
+  }
+  .title_text{
+    font-size: 12px;
+    position: absolute;
+    margin-left: 4px;
+    margin-top: 1px;
+  }
+  .title_right{
+   position: absolute;
+    left: 73%;
+    top: 1%;
 
+  }
+  .title_left{
+    margin-left:-80px;
   }
 </style>

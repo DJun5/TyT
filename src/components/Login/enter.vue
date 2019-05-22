@@ -19,20 +19,21 @@
      data: function () {
        return {
          user_phone:'',
-         verify_code:'',
-        shows:true
+         verify_code:''
        }
      },
      methods:{
 
      },
-     watch:{
+     computed:{
        shows(){
-         if(this.verify_code.length==0)
-            this.shows=true;
+         let shows=true;
+         if(this.verify_code.length!=0&&this.user_phone.length!=0)
+               shows=false;
          else
-            this.shows=false;
+               shows=true;
 
+            return shows
        }
      }
    }
@@ -56,6 +57,7 @@
 }
   .get_code{
     width: 20px;
+    height: 25px;
     background-color: #e0e0e0;
     font-size: 11px;
     margin-top: -15px;

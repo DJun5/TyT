@@ -3,15 +3,23 @@
         <div class="logo">
           <img class="imgs" src="../../assets/images/logo2.png">
         </div>
+        <div class="login_tab">
+
+          <mu-tabs :value="active"  indicator-color="transparent"  @change=" handleChanges" full-width>
+            <mu-tab value="enter">普通登陆</mu-tab>
+            <mu-tab value="register">游客登陆</mu-tab>
+          </mu-tabs>
+
+        </div>
       <div   class="swiper-container "  id="login"  ref="loginSwiper" >
           <div class="swiper-wrapper" >
             <div class="swiper-slide "  >
-              <!--登录界面-->
-                <Enter/>
+              <!--普通登陆界面-->
+              <Register/>
             </div>
             <div class="swiper-slide "  >
-                <!---注册界面---->
-              <Register/>
+                <!---游客登陆界面---->
+              <Enter/>
             </div>
             </div>
       </div>
@@ -26,26 +34,34 @@ import Swiper from "swiper";
 export default {
   data: function() {
     return {
-
+            active:"enter"
     };
   },
   created() {
     _self = this;
+
   },
   mounted() {
-    this.$nextTick(() => {
-      this.establish_swiper()
-  })
+    this.establish_swiper()
   },
   methods: {
     establish_swiper(){
       var _this = this;//区别开data中的this和swiper中的this
-      var swiper = new Swiper("#login", {
+      var login_swiper = new Swiper("#login", {
         effect : 'flip',
-        loop:true,
         flipEffect: {
           slideShadows : true,
           limitRotation : true
+        },
+        on:{
+          transitionStart: function() {
+            if (this.realIndex== 0) {
+              _this.active ="enter";
+            }
+            else if(this.realIndex==1){
+              _this.active="register";
+            }
+          }//滑动tab相应切换
         }
       });
     },
@@ -57,11 +73,23 @@ export default {
     loginOut() {
       this.$store.commit('SET_IS_LOGIN', false);
     },
+    handleChanges(val) {
+      this.active = val;
+      if(val=="enter")
+        this.swiper.slideTo(0,0,false);
+      else if(val=="register")
+      {
+        this.swiper.slideTo(1,0,false);
+      }
+    } //改变选中状态
   },
   computed: {
     getIsLogin() {
       return this.$store.state.user.is_login
-    }
+    },
+    swiper(){
+      return  this.$refs.loginSwiper.swiper;
+    }, //全局使用swiper对象
   },
   components: {
     Layout,
@@ -81,22 +109,30 @@ export default {
   background-size: cover;
 }
   .logo{
-    width: 30%;
-    height: 15%;
-     margin-left:35%;
-    margin-top:20%;
-
+    width: 112px;
+    height: 112px;
+    margin-left:33%;
+    margin-top:15%;
+    position:fixed;
   }
-
 .swiper-container{
   width: 80%;
-  height: 60%;
-  margin-left: 10%;
-  margin-top: 8%;
-  border-radius: 5px;
-  background-color: transparent;
+  margin-top:60%;
+  height: 50%;
+  border-radius:10px;
 }
-  .imgs{width: 100%;
+  .imgs{
+      width: 100%;
       height:100%;
+  }
+  .login_tab{
+    width: 80%;
+    position: absolute;
+    height: 8%;
+    margin-top: 45%;
+    margin-left:10%;
+  }
+  .mu-tabs{
+    background-color: transparent;
   }
 </style>

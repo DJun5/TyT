@@ -45,6 +45,7 @@
         </mu-list>
     </div>
     <mu-divider></mu-divider>
+
     <div class="person_bottom">
       <mu-list>
         <mu-sub-header>其他</mu-sub-header>
@@ -238,13 +239,14 @@
   .person_top{
     width: 100%;
     height: 30%;
-
+    margin-top: -10px;
   }
   .person_bottom{
     width: 100%;
-    height:70%;
+    height:60%;
+    margin-top: -5px;
   }
   .mu-divider{
-    margin-top:20px;
+    margin-top:10px;
   }
 </style>
