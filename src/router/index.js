@@ -5,9 +5,7 @@ import Index from '@/components/Home/Index'
 import Campus from '@/components/School/Campus'
 import Message from '@/components/Message/Message'
 import User from '@/components/Personal/User'
-import Search from '@/components/Search'
 import Login from '@/components/Login/login'
-import test from '@/components/test'
 import AddDynamic from '@/components/AddDynamic/addDynamic'
 import Address from '@/components/Message/Address'
 import Addfriend from '@/components/Message/Addfriend'
@@ -58,19 +56,6 @@ const routes =  [
       name: 'User',
       component: User,
       meta: { keepAlive: true }
-    },
-    {
-      path: '/all/search',
-      name: 'Search',
-      component: Search,
-      meta: { keepAlive: true }
-    },
-    {
-      path: '/user/test',
-      name: 'test',
-      component: test,
-      // 该页面必须登录才能访问
-      meta: { needLogin: true }
     },
     {
     path: '/login',
