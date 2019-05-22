@@ -20,37 +20,17 @@
       <!--主内容-->
       <div class="containers" slot="container">
 
-        <div class="swiper-container "    id="swiper_tab"  ref="mySwiper" >
+        <div class="swiper-container "  id="swiper_tab"  ref="mySwiper" >
           <div class="swiper-wrapper" >
 
-            <div class="swiper-slide slidepage"  >
-              <div class="swiper-container scroll">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide slidescroll">
-                    <Attention/>
-                  </div>
-                </div>
-              </div>
+            <div class="swiper-slide">
+              <Attention/>
             </div>
-
-            <div class="swiper-slide slidepage"  >
-              <div class="swiper-container scroll">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide slidescroll">
-                    <Find/>
-                  </div>
-                </div>
-              </div>
+            <div class="swiper-slide">
+              <Find/>
             </div>
-
-            <div class="swiper-slide slidepage"  >
-              <div class="swiper-container scroll">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide slidescroll">
-                    <Recommend/>
-                  </div>
-                </div>
-              </div>
+            <div class="swiper-slide">
+              <Recommend/>
             </div>
           </div>
         </div>
@@ -76,10 +56,7 @@ export default {
     created() {
     },
     mounted() {
-      this.$nextTick(() => {
-        this.establish_swiper()
-        this.establish_swiper_scroll()
-    })
+      this.establish_swiper();
     },
     methods: {
       handleChange(val) {
@@ -147,23 +124,23 @@ export default {
   width: 100%;
   height:80px;
 }
-
 .containers{
   width:100%;
   position: absolute;
-  height: 80%;
+  height: 82%;
   top:82px;
-  bottom: 55px;
   overflow: auto;
+  bottom: 55px;
 }
 .swiper-container{
   width: 100%;
   height: 100%;
+  position: absolute;
+  overflow: auto;
 }
 
 .mu-appbar {
   background-color:transparent;
-
 }
 
 .footer_wrap {

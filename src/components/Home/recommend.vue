@@ -1,15 +1,15 @@
 <template>
   <div class="re_container" ref="container">
     <div>
-      <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="load">
+      <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...." :loaded-all="load_all"  class="loads"  :loading="load_more" @load="load">
         <!--卡片展示-->
         <mu-card  v-for="item,index in userDynamic"  :key="index">
-          <mu-card-header  :title="item[0].user_name"  :sub-title="item[0].user_signature">
+          <mu-card-header  :title="item.username"  :sub-title="item.signature">
             <mu-avatar slot="avatar">
-              <img   :src="item[0].user_avatar" >
+            <!--  <img   :src="item.userHeadImg" >-->
             </mu-avatar>
             <!--加关注-->
-            <mu-button class="mu_add" textColor="red" @click="add_attention(item[0].user_name)"   v-if="!item[0].user_Befocused" round small >
+            <mu-button class="mu_add" textColor="red" @click="add_attention(item.user_name)"   round small >
               <mu-icon :size="20"  value="add" ></mu-icon>
               关注
             </mu-button>
@@ -33,23 +33,16 @@
             <!--更多-->
           </mu-card-header>
           <mu-card-text>
-            {{item[0].user_substance}}
-            {{item[0].user_Befocused}}
+            {{item.userType}}
           </mu-card-text>
           <mu-card-media>
-            <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-            <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-            <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-            <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-            <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-            <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-            <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-            <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-            <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+          <!--  <img   v-lazy="item.faceImg"  class="images" :style="{width: widthData}" >
+            <img   v-lazy="item.faceImg"    class="images" :style="{width: widthData}" >
+            <img  v-lazy="item.faceImg"  class="images" :style="{width: widthData}" >-->
           </mu-card-media>
           <mu-card-actions>
             <!--点赞-->
-            <mu-checkbox  :ripple="false"  v-model="likes" :value="item[0].user_name" @change="click_favorite(item[0].user_name)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
+            <mu-checkbox  :ripple="false"  v-model="likes" :value="item.username" @change="click_favorite(item.username)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
             <!--评论-->
             <mu-button  :ripple="false" icon class="mu_textsms" @click="ts" >
               <mu-icon :size="22" value="textsms" ></mu-icon>
@@ -61,76 +54,116 @@
             </mu-button>
             <!--分享-->
             <!--收藏-->
-            <mu-checkbox  :ripple="false" v-model="collect"   :value="item[0].user_name" @change="click_turn(item[0].user_name)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
+            <mu-checkbox  :ripple="false" v-model="collect"   :value="item.username" @change="click_turn(item.username)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
             <!--收藏-->
           </mu-card-actions>
         </mu-card>
       </mu-load-more>
   </div>
+    <Click_refresh v-if="loading" :restart="if_load"  v-on:if_load="if_load" ></Click_refresh>
   </div>
 </template>
 <script>
   import TestData from "../../../static/Json/TestData.json";
+  import {encryptBy,decryptBy} from '../../../config/common';
+  import { Toast } from 'mint-ui';
+  import { Indicator } from 'mint-ui';
+  import Click_refresh from '@/components/Common/Click_refresh'
   export default {
     data: function() {
        return{
          userDynamic:[],
          open:false,
-         num:5,
+         num:4,//从零开始算
          trigger: null,
          refreshing: false,
-         loading: false,
-         testData:null,
+         load_more: false,
+         loading:false,
          likes:[],
-         collect:[]
+         collect:[],
+         st:[],
+         load_all:false
        }
     },
     created(){ //获取json对象
-       var sum=0;
-      for(this.testData in TestData)
-      {
-        this.userDynamic.push(TestData[this.testData]);
-         sum++;
-        if(sum==this.num)
-        {
-          break;
-        }
-      }
-      this.widthData=100/9+"%";
+     this.GetData();
+    },
+    components:{
+      Click_refresh
+    },
+    computed:{
+
     },
     mounted () {
     },
     methods: {
       ts() {
       },
+      if_load(){
+        this.loading=false;
+        this.GetData();
+
+      },
+      GetData(){
+        Indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
+        const  _this=this;
+        this.$axios.get(process.env.API_HOST+'/User/recommend/queryAll*', {
+          headers: {'Content-Type': 'application/json;charset=utf-8'},// 设置传输内容的类型和编码
+          withCredentials: true// 指定某个请求应该发送凭据。允许客户端携带跨域cookie，也需要此配置
+        })
+          .then(function (response) {
+            _this.GetSum(response.data.data);
+            Indicator.close();
+            _this.loading=false
+          })
+          .catch(function (response) {
+            Toast({
+              message: '网络连接已断开，请检查网络设置.',
+              position: 'middle',
+              duration: 1000
+            });
+            Indicator.close();
+            _this.loading=true
+          });
+
+      },//获取数据
       refresh () {
         this.refreshing = true;
         this.$refs.container.scrollTop = 0;
         setTimeout(() => {
-          this.refreshing = false;
-        this.text = this.text === 'List' ? 'Menu' : 'List';
-        this.num = 10;
+        this.refreshing = false;
+        this.num =4;
+        this.GetData();
       }, 2000)
-      },
-      GetSum(){//获取加载更多的数量
-        var sum=0;
-       for(this.testData in TestData)
+      },//刷新
+      GetSum(data){
+        this.userDynamic=[];
+        for(var index in data)
         {
-          this.userDynamic[sum++]=(TestData[this.testData]);
-          if(sum>=this.num)
+          this.userDynamic.push(data[index]);
+          if(index==this.num)
           {
             break;
           }
         }
+        if(this.num>data.length)
+        {
+          this.load_all=true;
+        }
+        this.widthData=100/9+"%";
       },
       load () {
-        this.loading = true;
+        this.load_more = true;
         setTimeout(() => {
-          this.loading = false;
+          this.load_more = false;
           this.num+=5;
-          this.GetSum();
+          this.GetData();
       }, 2000)
-      },
+
+      },//加载更多
       click_favorite(name){
         var if_favorite=this.likes.includes(name);
         if(if_favorite)
@@ -155,7 +188,7 @@
   .re_container{
     width:100%;
     top:0px;
-    bottom:10px;
+    bottom:20px;
     overflow: auto;
     z-index: 1;
     position: absolute;
@@ -163,6 +196,9 @@
   .re_container::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
     width: 0px;
     height: 0px;
+  }
+  .loads{
+
   }
   .images{
     float: left;
@@ -183,4 +219,5 @@
     height: 300px;
     margin: auto;
   }
+
 </style>

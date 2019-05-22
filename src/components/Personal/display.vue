@@ -1,5 +1,6 @@
 <template>
-  <div class="wraps" ref="container" >
+  <div class="wraps"   ref="containers" >
+    <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...."  :loading="loading" @load="load">
     <mu-card  v-for="item,index in user_dynamic"  :key="index">
       <mu-card-header  :title="item[0].user_name"  :sub-title="item[0].user_signature">
         <mu-avatar slot="avatar">
@@ -64,6 +65,7 @@
         <!--收藏-->
       </mu-card-actions>
     </mu-card>
+      </mu-load-more>
   </div>
 </template>
 <script>
@@ -73,19 +75,35 @@
       return {
         icons:false,
         open: false,
+        num:5,
         add_show:true,
-        testData:[],
         likes:[],
-        collect:[]
+        collect:[],
+        refreshing: false,
+        loading: false,
+        user_dynamic:[]
       }
     },
     props:{
-        user_dynamic:{
-          default:[]
+        type:{
+           default:""
         }
     },
+
     created(){
-      this.widthData=100/9+"%";
+      if(this.type=='dynamics')
+      {
+        this.GetData();
+      }
+       if(this.type=='like')
+      {
+        this.GetData();
+      }
+      if(this.type=='collect')
+      {
+        this.GetData();
+      }
+
     },
     mounted(){
 
@@ -93,6 +111,18 @@
     methods: {
       ts() {
       },
+      GetData(){
+        var sum=0;
+        for(var testData in TestData)
+        {
+          this.user_dynamic.push(TestData[testData]);
+          sum++;
+          if(sum==this.num)
+          {
+            break;
+          }
+        } this.widthData=100/9+"%";
+      },//获取数据
       click_favorite(name){
         var if_favorite=this.likes.includes(name);
         if(if_favorite)
@@ -110,8 +140,35 @@
       },//收藏
       comment(index){
         this.$router.push('/detail');
-      }
+      },
+      refresh () {
+        this.refreshing = true;
+        setTimeout(() => {
+          this.refreshing = false;
+        this.num = 5;
+        this.GetData();
+      }, 2000)
+      },//刷新
+      GetSum(){
+        var sum=0;
+        for(var  testData in TestData) {
+          this.userDynamic[sum++] = (TestData[testData]);
+          if (sum >= this.num) {
+            break;
+          }
+
+        }
+      },//获取加载更多的数量
+      load(){
+        this.loading = true;
+        setTimeout(() => {
+          this.loading= false;
+        this.num+=5;
+        this.GetSum();
+      }, 2000)
+      },//加载更多
     }
+
 
   }
 </script>
@@ -149,5 +206,9 @@
   .mu-card{
     max-width: 750px;
     margin: 0 auto;
+  }
+  .mu-loading-wrap{
+    position: fixed;
+    top:-200px;
   }
 </style>

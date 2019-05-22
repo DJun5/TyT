@@ -18,10 +18,19 @@
   export default {
     data: function(){
       return {
-           user_name:null,
-           password:null,
-           visibility: false,
-           shows:true
+           user_name:'',
+           password:'',
+           visibility: false
+      }
+    },
+    computed:{
+      shows(){
+        let shows=true;
+        if(this.user_name.length!=0&&this.password.length!=0)
+            shows=false;
+        else
+           shows=true;
+        return shows;
       }
     }
   }
