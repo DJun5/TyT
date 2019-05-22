@@ -1,16 +1,17 @@
 <template>
     <Layout :has_share="false">
-        <div slot="container">
-
+        <div  style="height:100%;background-color: white;" slot="container">
           <!--head-->
           <mu-appbar >
             消息中心
+            <mu-bottom-nav-item title="Nearby" icon="location_on"></mu-bottom-nav-item>
             <mu-button icon   @click="address" slot="right" >
               <mu-icon value="account_circle"></mu-icon>
             </mu-button>
           </mu-appbar>
+
           <!--通知栏-->
-          <mu-list textline="two-line" >
+          <mu-list textline="two-line"  @click.native="inform">
             <mu-list-item avatar button :ripple="false">
               <mu-list-item-action>
                 <mu-avatar color="blue">
@@ -25,49 +26,30 @@
             </mu-list>
 
 
-          <div style="width: 100%;background-color: #dddddd ">全部聊天</div>
+          <div style="width: 100%; padding-left: 18px; background-color: #f5f5f5; ">全部聊天</div>
           <!--消息列表-->
-          <mu-paper :z-depth="1" class="demo-list-wrap">
+          <div >
             <mu-list textline="two-line">
 
-              <mu-list-item avatar button :ripple="false"  @click="chat" >
+              <mu-list-item avatar button :ripple="false"  @click="chat"
+                            v-for="item,index in list_one" :key="index">
                 <mu-list-item-action >
                   <mu-avatar  backgroundColor="blue" slot="leftAvatar"style="float: left;margin-right: 15px" >
                     <img src="../../assets/images/bg.png" />
                   </mu-avatar>
                 </mu-list-item-action>
                 <mu-list-item-content>
-                  <mu-list-item-title>AAAA</mu-list-item-title>
-                  <mu-list-item-sub-title>aaaaaaaa</mu-list-item-sub-title>
+                  <mu-list-item-title>{{item.name}}</mu-list-item-title>
+                  <mu-list-item-sub-title>{{item.con}}</mu-list-item-sub-title>
                 </mu-list-item-content>
                 <mu-list-item-action>
                     <mu-badge content="12"></mu-badge>
                 </mu-list-item-action>
               </mu-list-item>
-              <mu-divider inset></mu-divider>
-
-
-              <mu-list-item avatar button :ripple="false">
-                <mu-list-item-action >
-                  <mu-avatar  backgroundColor="blue" slot="leftAvatar"style="float: left;margin-right: 15px" >
-                    <img src="../../assets/images/bg.png" />
-                  </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-content>
-                  <mu-list-item-title>AAAA</mu-list-item-title>
-                  <mu-list-item-sub-title>aaaaaaaa</mu-list-item-sub-title>
-                </mu-list-item-content>
-                <mu-list-item-action>
-                    <mu-badge content="12"></mu-badge>
-                </mu-list-item-action>
-              </mu-list-item>
-              <mu-divider inset></mu-divider>
 
             </mu-list>
-          </mu-paper>
 
-
-
+          </div>
 
 
         </div>
@@ -88,6 +70,13 @@ export default {
             num: 10,
            text: 'List',
           toast: false,
+          list_one:[
+            {"name":"张三","con":"每次人们走进这片荒野，"},
+            {"name":"李四","con":"被他们惊艳的同时，"},
+            {"name":"王五","con":"心中也充满着敬畏。"},
+
+
+          ],
         };
     },
     created() {
@@ -107,6 +96,9 @@ export default {
       chat() {
         this.$router.push("/message/chat");
       },
+      inform() {
+        this.$router.push("/message/inform");
+      },
     },
     computed: {
         getLoading() {
@@ -121,7 +113,8 @@ export default {
           success: 'check_circle',
           info: 'info',
           warning: 'priority_high',
-          error: 'warning'
+          error: 'warning',
+
         }[this.color.color]
       }
     },
@@ -146,5 +139,12 @@ export default {
   width: 100%;
   //max-width: 360px;
   overflow: hidden;
+}
+.mu-item{
+  background-color: #f5f5f5;
+}
+.mu-appbar{
+
+  box-shadow: 0px 0px 0px 0px black;
 }
 </style>

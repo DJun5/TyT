@@ -12,16 +12,14 @@
     <div class="scan">
 
                <div id="bcid">
-                     <div style="height:40%"></div>
-                     <p class="tip">...载入中...</p>
                </div>
 
-            <!--    <div class="con">
+                <div class="con">
                   <mu-button @click="startRecognize">创建控件</mu-button>
                   <mu-button @click="startScan">开始扫描</mu-button>
                   <mu-button @click="cancelScan">结束扫描</mu-button>
                   <mu-button @click="closeScan">关闭控件</mu-button>
-                </div>-->
+                </div>
     </div>
 
 
@@ -37,6 +35,7 @@
     data() {
       return {
         codeUrl: '',
+
       }
     },
     created(){
@@ -106,10 +105,11 @@
 
 <style lang="less">
 .scan {
-  height: 100%;
+
+  height: 90%;
   #bcid {
     width: 100%;
-    height:80%;
+    height:90%;
     position: absolute;
     left: 0;
     right: 0;
@@ -132,6 +132,19 @@
 .body{
   height: 100%;
   width: 100%;
+  //background-color: black;
+  color:white;
+}
+.mu-primary-color{
+  background-color: #f5f5f5;
+  color: black;
+}
+.mu-item-title{
+  padding-right: 40px;
+}
+.mu-appbar{
+
+  box-shadow: 0px 0px 0px 0px black;
 }
 </style>
 

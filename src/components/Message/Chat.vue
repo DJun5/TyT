@@ -1,11 +1,12 @@
 <template>
+
 <div class="body">
   <!--导航-->
-  <mu-appbar style="width: 100%;" color="primary">
+  <mu-appbar style="width: 100%;" >
     <mu-button icon slot="left" @click="message">
       <mu-icon value="keyboard_backspace"  ></mu-icon>
     </mu-button>
-    <mu-list-item-title style="text-align: center;">好友名</mu-list-item-title>
+    <mu-list-item-title style="text-align: center;">{{nickname}}</mu-list-item-title>
     <mu-button icon slot="right" @click="message">
       <mu-icon value="videocam"  ></mu-icon>
     </mu-button>
@@ -31,7 +32,7 @@
   <div class="bottom" >
     <div class="bottom1">
       <mu-container>
-        <mu-text-field v-model="value12"  icon="comment"  placeholder="输入信息"></mu-text-field>
+        <mu-text-field v-model="value12"  icon=""  placeholder="输入信息"></mu-text-field>
         <mu-button icon  @click="sendValue" >
           <mu-icon value="send"  ></mu-icon>
         </mu-button>
@@ -74,6 +75,7 @@
     data () {
       return {
         value12: '',
+        nickname:用户名
       }
     },
     methods: {
@@ -114,10 +116,14 @@
   color:rgba(0,0,0,.3);
 }
 .bottom1{
+  width: 100%;
   text-align: center;
 /*  display: flex;
   justify-content: center;
   padding: 0 10px;*/
 }
-
+  .mu-primary-color{
+    background-color: #f5f5f5;
+    color: black;
+  }
 </style>

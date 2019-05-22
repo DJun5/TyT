@@ -5,20 +5,19 @@ import Index from '@/components/Home/Index'
 import Campus from '@/components/School/Campus'
 import Message from '@/components/Message/Message'
 import User from '@/components/Personal/User'
+import Search from '@/components/Search'
+import Settings from '@/components/Settings'
 import Login from '@/components/Login/login'
+import test from '@/components/test'
 import AddDynamic from '@/components/AddDynamic/addDynamic'
 import Address from '@/components/Message/Address'
+import Chat from '@/components/Message/Chat'
+import Inform from '@/components/Message/inform'
 import Addfriend from '@/components/Message/Addfriend'
 import Attention from '@/components/Home/attention'
 import Find from '@/components/Home/find'
 import Detail from '@/components/Home/detail'
-import FindPeople from  '@/components/School/FindPeople'
-import FindMajor from  '@/components/School/FindMajor'
-import FindOrganziation from  '@/components/School/FindOrganziation'
-import WorkProcess from  '@/components/School/WorkProcess'
-import Setting from '@/components/Personal/Setting'
-
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes =  [
     {
@@ -29,7 +28,7 @@ const routes =  [
     },
     {
       path: '/campus',
-      name: 'Campus',
+
       component: Campus,
       meta: { keepAlive: true }
     },
@@ -51,6 +50,19 @@ const routes =  [
     component: Addfriend,
 
   },
+
+  {
+    path: '/message/chat',
+    name: 'Chat',
+    component: Chat,
+
+  },
+  {
+    path: '/message/inform',
+    name: 'Inform',
+    component: Inform,
+
+  },
     {
       path: '/user',
       name: 'User',
@@ -58,7 +70,26 @@ const routes =  [
       meta: { keepAlive: true }
     },
     {
-    path: '/login',
+      path: '/all/search',
+      name: 'Search',
+      component: Search,
+      meta: { keepAlive: true }
+    },
+
+    {
+      path: '/user/settings',
+      name: 'Settings',
+      component: Settings,
+    },
+    {
+      path: '/user/test',
+      name: 'test',
+      component: test,
+      // 该页面必须登录才能访问
+      meta: { needLogin: true }
+    },
+    {
+    path: '/user/login',
     name: 'Login',
     component: Login,
     meta: { keepAlive: true }
@@ -85,34 +116,7 @@ const routes =  [
     path: '/detail',
     name: 'Detail',
     component: Detail
-  },
-  {
-    path: '/Campus/FindPeople',
-    name: 'FindPeople',
-    component: FindPeople
-  },
-  {
-    path: '/Campus/FindMajor',
-    name: 'FindMajor',
-    component: FindMajor
-  },
-  {
-    path: '/Campus/FindOrganziation',
-    name: 'FindOrganziation',
-    component: FindOrganziation
-  },
-  {
-    path: '/Campus/WorkProcess',
-    name: 'WorkProcess',
-    component: WorkProcess
-  },
-  {
-    path: '/user/setting',
-    name: 'Setting',
-    component: Setting
   }
-
-
 
   ];
 
@@ -152,7 +156,9 @@ const router = new VueRouter({
   routes: routes
 })
 
+
 router.beforeEach((to, from, next) => {
+    console.log(from);
     // 判断配置的路由中是否存在needLogin存在则做出对应的判断
     if (to.matched.some(record => record.meta.needLogin)) {
         // 从状态管理器（vuex）中获取登录状态，如果未登录过的跳转至登录页
