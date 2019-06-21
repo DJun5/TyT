@@ -6,7 +6,7 @@
         <mu-card  v-for="item,index in userDynamic"  :key="index">
           <mu-card-header  :title="item.username"  :sub-title="item.signature">
             <mu-avatar slot="avatar">
-            <!--  <img   :src="item.userHeadImg" >-->
+          <!--    <img   :src="item.userHeadImg" >-->
             </mu-avatar>
             <!--加关注-->
             <mu-button class="mu_add" textColor="red" @click="add_attention(item.user_name)"   round small >
@@ -20,7 +20,7 @@
                 <mu-icon :size="30" value="more_horiz"></mu-icon>
               </mu-button>
               <mu-list slot="content">
-                <mu-list-item button  @click="ts(index)">
+                <mu-list-item button  >
                   <mu-icon :size="20"  value="warning" ></mu-icon>
                   <mu-list-item-title>举报</mu-list-item-title>
                 </mu-list-item>
@@ -36,20 +36,18 @@
             {{item.userType}}
           </mu-card-text>
           <mu-card-media>
-          <!--  <img   v-lazy="item.faceImg"  class="images" :style="{width: widthData}" >
-            <img   v-lazy="item.faceImg"    class="images" :style="{width: widthData}" >
-            <img  v-lazy="item.faceImg"  class="images" :style="{width: widthData}" >-->
+            <!--<img  v-for="imageIndex,count in imagelist"   src="../../assets/images/a.jpeg"   :key="count"  class="images" :style="{width:100/imagelist.length+'%'}" >-->
           </mu-card-media>
           <mu-card-actions>
             <!--点赞-->
             <mu-checkbox  :ripple="false"  v-model="likes" :value="item.username" @change="click_favorite(item.username)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
             <!--评论-->
-            <mu-button  :ripple="false" icon class="mu_textsms" @click="ts" >
+            <mu-button  :ripple="false" icon class="mu_textsms"  >
               <mu-icon :size="22" value="textsms" ></mu-icon>
             </mu-button>
             <!--评论-->
             <!--分享-->
-            <mu-button  :ripple="false" icon  class="mu_share" @click="ts">
+            <mu-button  :ripple="false" icon  class="mu_share">
               <mu-icon :size="22" value="share"  ></mu-icon>
             </mu-button>
             <!--分享-->
@@ -60,7 +58,7 @@
         </mu-card>
       </mu-load-more>
   </div>
-    <Click_refresh v-if="loading" :restart="if_load"  v-on:if_load="if_load" ></Click_refresh>
+    <Click_refresh v-if="loading" :restart="loading"  v-on:if_load="if_load" ></Click_refresh>
   </div>
 </template>
 <script>
@@ -86,7 +84,21 @@
        }
     },
     created(){ //获取json对象
-     this.GetData();
+
+    },
+    props:{
+      DataLoad:{
+           type: Boolean,
+          default:false
+      }
+    },
+    watch:{
+      DataLoad(){
+        if(this.DataLoad)
+        {
+          this.GetData()
+        }
+      }
     },
     components:{
       Click_refresh
@@ -95,6 +107,7 @@
 
     },
     mounted () {
+
     },
     methods: {
       ts() {
@@ -102,7 +115,6 @@
       if_load(){
         this.loading=false;
         this.GetData();
-
       },
       GetData(){
         Indicator.open({
@@ -110,7 +122,7 @@
           spinnerType: 'fading-circle'
         });
         const  _this=this;
-        this.$axios.get(process.env.API_HOST+'/User/recommend/queryAll*', {
+        this.$axios.get( this.GLOBAL.Api_Host +'/User/recommend/queryAll*', {
           headers: {'Content-Type': 'application/json;charset=utf-8'},// 设置传输内容的类型和编码
           withCredentials: true// 指定某个请求应该发送凭据。允许客户端携带跨域cookie，也需要此配置
         })
@@ -120,12 +132,12 @@
             _this.loading=false
           })
           .catch(function (response) {
+            Indicator.close();
             Toast({
               message: '网络连接已断开，请检查网络设置.',
               position: 'middle',
               duration: 1000
             });
-            Indicator.close();
             _this.loading=true
           });
 

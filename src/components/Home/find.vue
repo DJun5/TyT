@@ -1,16 +1,16 @@
 <template>
-  <div  class="card_first" id="card" ref="container">
+  <div  class="card_first" id="find"   ref="container">
     <div>
 
-    <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...."  :loading="loading" @load="load">
+    <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...."  :loading="load_more" @load="load">
     <!--卡片展示-->
       <mu-card  v-for="item,index in userDynamic"  :key="index">
-        <mu-card-header  :title="item[0].user_name"  :sub-title="item[0].user_signature">
+        <mu-card-header  :title="item.title"  :sub-title="item.title">
           <mu-avatar slot="avatar">
-            <img   :src="item[0].user_avatar" >
+            <img   :src="item.infoImg1" >
           </mu-avatar>
           <!--加关注-->
-          <mu-button class="mu_add" textColor="red" @click="add_attention(item[0].user_name)"   v-if="!item[0].user_Befocused" round small >
+          <mu-button   class="mu_add" textColor="red"  v-show="item.title!==attention" @click="add_attention(item.title)"   round small >
             <mu-icon :size="20"  value="add" ></mu-icon>
             关注
           </mu-button>
@@ -21,7 +21,7 @@
               <mu-icon :size="30" value="more_horiz"></mu-icon>
             </mu-button>
             <mu-list slot="content">
-              <mu-list-item button  @click="ts(index)">
+              <mu-list-item button  >
                 <mu-icon :size="20"  value="warning" ></mu-icon>
                 <mu-list-item-title>举报</mu-list-item-title>
               </mu-list-item>
@@ -34,27 +34,26 @@
           <!--更多-->
         </mu-card-header>
         <mu-card-text>
-          {{item[0].user_substance}}
-          {{item[0].user_Befocused}}
+          {{item.content}}
         </mu-card-text>
         <mu-card-media>
           <img  v-for="imageIndex,count in imagelist"   src="../../assets/images/a.jpeg"   :key="count"  class="images" :style="{width:100/imagelist.length+'%'}" >
         </mu-card-media>
         <mu-card-actions>
           <!--点赞-->
-          <mu-checkbox  :ripple="false" v-model="likes" :value="item[0].user_name" @change="click_favorite(item[0].user_name)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
+          <mu-checkbox  :ripple="false" v-model="likes" :value="item.title" @change="click_favorite(item.title)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
           <!--评论-->
           <mu-button icon  :ripple="false"   class="mu_textsms" @click="comment(index)" >
             <mu-icon :size="22" value="textsms" ></mu-icon>
           </mu-button>
           <!--评论-->
           <!--分享-->
-          <mu-button icon  :ripple="false" class="mu_share" @click="ts">
+          <mu-button icon  :ripple="false" class="mu_share">
             <mu-icon :size="22" value="share"  ></mu-icon>
           </mu-button>
           <!--分享-->
           <!--收藏-->
-          <mu-checkbox  :ripple="false" v-model="collect"   :value="item[0].user_name" @change="click_turn(item[0].user_name)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
+          <mu-checkbox  :ripple="false" v-model="collect"   :value="item.title" @change="click_turn(item.title)"  class="mu_turned"   uncheck-icon="turned_in_not" checked-icon="turned_in"  />
           <!--收藏-->
         </mu-card-actions>
       </mu-card>
@@ -68,13 +67,17 @@
       </div>
       <!---------返回顶部--------------->
       <!---->
-
+      <Click_refresh v-if="loading" :restart="loading"  v-on:if_load="if_load" ></Click_refresh>
       <!---->
 </div>
 </div>
 </template>
 <script>
 import TestData from "../../../static/Json/TestData.json";
+import { Toast } from 'mint-ui';
+import {encryptBy,decryptBy} from '../../../config/common';
+import { Indicator } from 'mint-ui';
+import Click_refresh from '@/components/Common/Click_refresh'
 export default {
   data: function() {
     return {
@@ -86,7 +89,9 @@ export default {
       add_show:true,
       userDynamic:[],
       likes:[],
+      load_more: false,
       collect:[],
+      attention:'',
       back_show:false,
       imagelist:[
         {"src":"../../assets/images/a.jpeg"},
@@ -95,56 +100,108 @@ export default {
     }
   },
     created(){ //获取json对象
-     this.GetData();
+    this.GetData();
     },
-  mounted () {
-      window.addEventListener('scroll', this.onScroll,true);
+  props:{
+    DataLoad_find:{
+      type: Boolean,
+      default:false
+    }
   },
+  watch:{
+    DataLoad_find(){
+      if(this.DataLoad_find)
+      {
+        this.GetData()
+      }
+    }
+  },
+  components:{
+    Click_refresh
+  },
+  mounted () {
+    this.$nextTick( function() {
+      window.addEventListener('scroll', this.onScroll, true);//监听滑动
+    });
+  },
+
   methods: {
-     ts() {
-     },
+    if_load(){
+      this.loading=false;
+      this.GetData();
+    },
     BackTop(){
-      this.$refs.container.scrollTop = 0;
+      this.$refs.container.scrollTop = 0;//距离顶部的距离为0
+    },
+    onScroll(){
+      let scrollTop =document.getElementById("find").scrollTop;
+      if(scrollTop>=2000)//判断滑动到那一位置
+      {
+        this.back_show=true;
+      }
+      else {
+        this.back_show=false;
+      }
     },
     GetData(){
-      var sum=0;
-      for(var testData in TestData)
-      {
-        this.userDynamic.push(TestData[testData]);
-        sum++;
-        if(sum==this.num)
-        {
-          break;
-        }
-      }
-      this.widthData=100/9+"%";
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      });
+      const  _this=this;
+      this.$axios.get( this.GLOBAL.Api_Host+'/Dynamic/queryAll.do', {
+          headers: {'Content-Type': 'application/json;charset=utf-8'},// 设置传输内容的类型和编码
+          withCredentials: true// 指定某个请求应该发送凭据。允许客户端携带跨域cookie，也需要此配置
+        })
+        .then(function (response) {
+          _this.GetSum(response.data.data);
+          Indicator.close();
+          _this.loading=false
+        })
+        .catch(function (response) {
+          Indicator.close();
+          Toast({
+            message: '网络连接已断开，请检查网络设置.',
+            position: 'middle',
+            duration: 1000
+          });
+          _this.loading=true
+        });
+
     },//获取数据
     add_attention(name) {
-         this.$store.dispatch('add_attention',name);
+        /* this.$store.dispatch('add_attention',name);*/
+        this.attention=name;
          console.log(name);
      },//点击加关注
     refresh () {
       this.refreshing = true;
       setTimeout(() => {
         this.refreshing = false;
-        this.num = 5;
+      this.num =4;
       this.GetData();
     }, 2000)
     },//刷新
-    GetSum(){
-      var sum=0;
-      for(var  testData in TestData) {
-        this.userDynamic[sum++] = (TestData[testData]);
-        if (sum >= this.num) {
+    GetSum(data){
+      this.userDynamic=[];
+      for(var index in data)
+      {
+        this.userDynamic.push(data[index]);
+        if(index==this.num)
+        {
           break;
         }
-
       }
-    },//获取加载更多的数量
+      if(this.num>data.length)
+      {
+        this.load_all=true;
+      }
+      this.widthData=100/9+"%";
+    },
     load(){
-      this.loading = true;
+      this.load_more = true;
       setTimeout(() => {
-        this.loading= false;
+        this.load_more = false;
         this.num+=5;
         this.GetSum();
     }, 2000)
@@ -167,21 +224,16 @@ export default {
     comment(index){
       this.$router.push('/detail');
     },
-    onScroll(){
-      let scrollTop = document.getElementById('card').scrollTop;
-      if(scrollTop>=2000)
-      {
-        this.back_show=true;
-      }
-      else {
-        this.back_show=false;
 
-      }
+    scrollEvent (){
 
     }
   },
   destroyed () {
-    window.removeEventListener('scroll', this.onScroll)
+    this.$nextTick( function(){
+      window.removeEventListener('scroll', this.onScroll)
+    });
+
   }
     }
 
@@ -199,7 +251,7 @@ export default {
   overflow: auto;
   top:0;
   left:0 ;
-  bottom:20px; /*关键*/
+  bottom:25px; /*关键*/
 }
  .card_first::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
    width: 0px;
@@ -223,11 +275,13 @@ export default {
  }
 .mu-card{
   max-width: 750px;
-  margin: 0 auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 15px;
 }
 .back_top{
     position:fixed;
-    z-index:10000;
+    z-index:100;
     top:82%;
     right:5%;
 }

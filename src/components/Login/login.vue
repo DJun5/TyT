@@ -4,12 +4,10 @@
           <img class="imgs" src="../../assets/images/logo2.png">
         </div>
         <div class="login_tab">
-
           <mu-tabs :value="active"  indicator-color="transparent"  @change=" handleChanges" full-width>
             <mu-tab value="enter">普通登陆</mu-tab>
             <mu-tab value="register">游客登陆</mu-tab>
           </mu-tabs>
-
         </div>
       <div   class="swiper-container "  id="login"  ref="loginSwiper" >
           <div class="swiper-wrapper" >
@@ -82,6 +80,7 @@ export default {
         this.swiper.slideTo(1,0,false);
       }
     } //改变选中状态
+
   },
   computed: {
     getIsLogin() {

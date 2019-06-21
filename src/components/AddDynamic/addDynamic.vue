@@ -6,7 +6,7 @@
           取消
         </mu-button>
         <span class="mu_text">动态</span>
-          <mu-button class="mu-issue"   :disabled="If_show"  round slot="right" >
+          <mu-button class="mu-issue"  @click="publish" :disabled="If_show"  round slot="right" >
           发表
         </mu-button>
       </mu-appbar>
@@ -40,6 +40,30 @@ export default {
 
     },
     methods: {
+      publish(){
+        var that=this;
+        /*this.GLOBAL.Api_Host//移动端时*/
+        this.$axios.post('/api/Dynamic/addSubmit.do', {
+            userId:4,
+            title:"hello world",
+            content:"sdsdsads",
+            dynamicOpenDegreeId:"全校可见",
+            dynamicType:"生活",
+            headers: {'Content-Type': 'application/json;charset=utf-8'},// 设置传输内容的类型和编码
+            withCredentials: true// 指定某个请求应该发送凭据。允许客户端携带跨域cookie，也需要此配置
+          })
+          .then(function (response) {
+                 if(response.status==200) {
+                     this.GoBack();
+                 }else {
+                   console.log(response.msg);
+                 }
+          })
+          .catch(function (response) {
+           console.log(response);
+          });
+
+      },
       GoBack(){
         if (this.leftAction) {
           this.leftAction.call(this.$parent);

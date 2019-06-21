@@ -12,7 +12,7 @@ import Addfriend from '@/components/Message/Addfriend'
 import Attention from '@/components/Home/attention'
 import Find from '@/components/Home/find'
 import Detail from '@/components/Home/detail'
-import FindPeople from  '@/components/School/FindPeople'
+import FindPeople from  '@/components/School/People/FindPeople'
 import FindMajor from  '@/components/School/FindMajor'
 import FindOrganziation from  '@/components/School/FindOrganziation'
 import WorkProcess from  '@/components/School/WorkProcess'
@@ -23,13 +23,13 @@ Vue.use(VueRouter);
 
 const routes =  [
     {
-      path: '/',
+      path: '/index',
       name: 'Index',
       component: Index,
       meta: { keepAlive: true }
     },
     {
-      path: '/campus',
+      path: '/',
       name: 'Campus',
       component: Campus,
       meta: { keepAlive: true }

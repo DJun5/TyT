@@ -1,7 +1,7 @@
 <template>
  <div class="attentions"  ref="attention_srcoll">
    <div class="attention_header">
-     <div class="add_dynamic" v-if="has_dynamic">
+     <div class="add_dynamic" v-show="has_dynamic">
      <!--卡片展示-->
        <mu-card  v-for="(item,index) in userDynamic" :key="index">
          <mu-card-header :title="item[0].user_name"  :sub-title="item[0].user_signature">
@@ -28,26 +28,18 @@
            {{item[0].user_substance}}
          </mu-card-text>
          <mu-card-media>
-           <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-           <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-           <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-           <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-           <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-           <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-           <img   v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
-           <img   v-lazy="item[0].user_photo"    class="images" :style="{width: widthData}" >
-           <img  v-lazy="item[0].user_photo"  class="images" :style="{width: widthData}" >
+         <!--  <img  v-for="imageIndex,count in imagelist"   src="../../assets/images/a.jpeg"   :key="count"  class="images" :style="{width:100/imagelist.length+'%'}" >-->
          </mu-card-media>
          <mu-card-actions>
            <!--点赞-->
            <mu-checkbox  :ripple="false"  v-model="likes" :value="'favorite'+index" @change="click_favorite(index)" class="mu_favorite"  uncheck-icon="favorite_border"  checked-icon="favorite"></mu-checkbox>
            <!--评论-->
-           <mu-button  :ripple="false" icon class="mu_textsms" @click="ts" >
+           <mu-button  :ripple="false" icon class="mu_textsms"  >
              <mu-icon :size="22" value="textsms" ></mu-icon>
            </mu-button>
            <!--评论-->
            <!--分享-->
-           <mu-button  :ripple="false" icon  class="mu_share" @click="ts">
+           <mu-button  :ripple="false" icon  class="mu_share">
              <mu-icon :size="22" value="share"  ></mu-icon>
            </mu-button>
            <!--分享-->
@@ -67,10 +59,10 @@
    <!--没有关注的人时显示-->
    <mu-paper  >
      <!--横向滚动的头部-->
-     <div class="paper_header"  v-if="!has_dynamic"  >
+     <div class="paper_header"  v-show="!has_dynamic"  >
       <div class="paper_title">你可能感兴趣的用户</div>
      <div class="paper_more">
-       <button  class="mu_more" @click="ts" >
+       <button  class="mu_more"  >
          查看更多
          <mu-icon :size="26" class="mu_right" value="keyboard_arrow_right"></mu-icon>
        </button>
@@ -127,7 +119,6 @@
     created(){
       this.userDynamic=TestData;
       this.peopleInterested=TetsData2;//获取到横向滚动的测试数据
-      this.widthData=100/9+"%";
      this.$nextTick(() => {//调用滚动方法
         this.personScroll();
    });
@@ -138,7 +129,7 @@
         return this.width;
       },//计算出横向滚动组件需要的总宽度
       personScroll() {
-        this.$refs.paper_scroll.style.width = this.GetNum() + "px";
+        this.$refs.paper_scroll.style.width = this.GetNum() + "px";//得出所需的宽度
         this.$nextTick(() => {
           if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.paper_header, {
@@ -152,9 +143,6 @@
         }
       });
       },//横向滚动
-      ts() {
-        console.log("sdsdasd");
-      },
       deletePeople(index) {
         this.width=120*Object.keys(this.peopleInterested).length;
         this.$delete(this.peopleInterested,index);
@@ -175,7 +163,7 @@
     watch:{
       width: function(){
         this.GetNum();
-      this.personScroll();
+        this.personScroll();
       }//监听横滑动的宽度
     },
   /*  mounted () {
@@ -210,6 +198,13 @@
     position: absolute;
 
   }
+  .attention_header{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+
+  }
   image[lazy=loading] {
     width: 40px;
     height: 300px;
@@ -224,13 +219,16 @@
   .mu-card-actions{
     top: 10px;
     clear:both;
+
   }
   .attentions{
      position: absolute;
      width: 100%;
-     height:100%;
-    overflow: auto;
-    z-index: 5;
+     height:95%;
+     overflow: auto;
+     top:0;
+    bottom:20px;
+     z-index: 5;
    }
   .attentions::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
     width: 0px;
@@ -239,7 +237,6 @@
   .mu-paper{
     height: 40%;
     background-color:#fafafa;
-
   }
 
   .paper_header {

@@ -27,10 +27,10 @@
               <Attention/>
             </div>
             <div class="swiper-slide">
-              <Find/>
+              <Find  :DataLoad_find="find"></Find>
             </div>
             <div class="swiper-slide">
-              <Recommend/>
+              <Recommend :DataLoad="start"></Recommend>
             </div>
           </div>
         </div>
@@ -50,7 +50,9 @@ export default {
         return {
           loading: 'init',
           active1: "find",
-          index:0
+          index:0,
+          find:false,
+          start:false
         }
     },
     created() {
@@ -62,42 +64,39 @@ export default {
       handleChange(val) {
         this.active1 = val;
         if(val=="find")
-          this.swiper.slideTo(1,0,false);
-        else if(val=="attention")
-          this.swiper.slideTo(0,0,false);
+          this.swiper.slideTo(1,0,false);//切换页面
+        else if(val=="attention") {
+          this.swiper.slideTo(0, 0, false);
+         this.find=true;
+        }
         else if(val=="recommend")
+        {
           this.swiper.slideTo(2,0,false);
+          this.start=true;
+        }
       }, //改变选中状态
-      establish_swiper_scroll(){
-        var scrollSwiper = new Swiper('.scroll', {
-          direction: 'vertical',
-          freeMode: true,
-          slidesPerView: 'auto',
-          mousewheel: {
-            releaseOnEdges: true
-          }
-        })
-      },
       establish_swiper(){
         var _this=this;//区别开data中的this和swiper中的this
         var swiper= new Swiper("#swiper_tab", {
-          initialSlide: 1,
+          initialSlide: 1,//初始化显示
           noSwiping : true,
-          noSwipingClass : 'stop-swiping',
-          resistanceRatio: 0,
-          watchSlidesProgress: true,
+          noSwipingClass : 'stop-swiping',//禁止滑动的部分
+          resistanceRatio: 0,//弹性为0
+           watchSlidesProgress: true,
           on: {
-            transitionStart: function() {
+            transitionStart: function() {//监听滑动，切换页面
               if (this.realIndex== 0) {
                 _this.active1 = "attention";
               }
               else if(this.realIndex==1){
                 _this.active1="find";
+                this.find=true;
               }
               else if(this.realIndex==2){
                 _this.active1 = "recommend";
+                _this.start=true;
               }
-            }
+          }
           }
         });
       }

@@ -54,8 +54,8 @@
   <div class="footer_wrap" v-if="has_footer && !layout_type">
       <mu-paper>
         <mu-bottom-nav :value="active_nav" @change="handleChange">
-          <mu-bottom-nav-item  title="首页" icon="home" key="首页" value="/" />
-          <mu-bottom-nav-item  title="大学" icon="school" key="大学" value="/Campus" />
+          <mu-bottom-nav-item  title="大学" icon="school" key="大学" value="/" />
+          <mu-bottom-nav-item  title="广场" icon="home" key="首页" value="/index" />
         <!--  <mu-bottom-nav-item  icon="add_box" class="mu-icon"    />-->
           <mu-button icon :ripple="false" key="添加" to="/addDynamic" >
             <mu-icon :size="40" value="add_box"></mu-icon>
@@ -90,29 +90,29 @@ export default {
       open: false,
       docked: false,
       layout_type: false,
-      dialog: false,
+      dialog: false
     };
   },
   props: {
     title: {
       type: String,
-      default: '',
+      default: ''
     },
     has_menu: {
       type: Boolean,
-      default: true,
+      default: true
     },
     has_share: {
       type: Boolean,
-      default: true,
+      default: true
     },
     leftAction: {
-      type: Function,
+      type: Function
     },
     has_footer: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   created() {
     _self = this;
@@ -211,20 +211,6 @@ export default {
   },
   watch: {
     // 页面切换过渡动画逻辑
-    '$route' (to, from) {
-      const toDepth = to.path.split('/').length;
-      const fromDepth = from.path.split('/').length;
-      if (toDepth === fromDepth) {
-        this.transitionName = 'slide-left';
-      }
-      if (toDepth > fromDepth) {
-        this.transitionName = 'slide-right-enter';
-      }
-      if (toDepth <fromDepth) {
-        this.transitionName = 'slide-left';
-      }
-    }
-
 
   },
 };
@@ -240,7 +226,7 @@ export default {
   position: relative;
 }
   .footer_wrap {
-  position: absolute;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;

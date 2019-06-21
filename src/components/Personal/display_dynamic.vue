@@ -1,5 +1,5 @@
 <template>
-  <div class="wraps"   ref="containers" >
+  <div class="wraps"   ref="display_dynamic" >
     <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...."  :loading="loading" @load="load">
     <mu-card  v-for="item,index in user_dynamic"  :key="index">
       <mu-card-header  :title="item[0].user_name"  :sub-title="item[0].user_signature">
@@ -84,25 +84,8 @@
         user_dynamic:[]
       }
     },
-    props:{
-        type:{
-           default:""
-        }
-    },
-
     created(){
-      if(this.type=='dynamics')
-      {
         this.GetData();
-      }
-       if(this.type=='like')
-      {
-        this.GetData();
-      }
-      if(this.type=='collect')
-      {
-        this.GetData();
-      }
 
     },
     mounted(){
@@ -149,22 +132,12 @@
         this.GetData();
       }, 2000)
       },//刷新
-      GetSum(){
-        var sum=0;
-        for(var  testData in TestData) {
-          this.userDynamic[sum++] = (TestData[testData]);
-          if (sum >= this.num) {
-            break;
-          }
-
-        }
-      },//获取加载更多的数量
       load(){
         this.loading = true;
         setTimeout(() => {
           this.loading= false;
         this.num+=5;
-        this.GetSum();
+      this.GetData();
       }, 2000)
       },//加载更多
     }
@@ -178,15 +151,9 @@
   .wraps{
     width: 100%;
     height:100%;
-    position: absolute;
-    overflow: auto;
-    top: 0;
-    bottom:10px;
+    z-index:99;
   }
-  .wraps::-webkit-scrollbar {/*高宽分别对应横竖滚动条的尺寸*/
-    width: 0px;
-    height: 0px;
-  }
+
   .images{
     float: left;
     min-width: 33%;

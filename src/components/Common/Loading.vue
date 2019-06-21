@@ -1,3 +1,4 @@
+<!--
 <template>
    <div class="content" v-loading="loading" :target="target" data-mu-loading-overlay-color="rgba(0, 0, 0, .6)" >
 
@@ -32,3 +33,4 @@
   position: absolute;
 }
 </style>
+-->

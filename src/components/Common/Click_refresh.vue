@@ -17,8 +17,8 @@
      },
       props:{
         restart:{
-          type:Boolean,
-          default:false
+          type: Boolean,
+          default: false
         }
       }
     }

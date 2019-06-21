@@ -1,6 +1,6 @@
 <template>
   <Layout :has_share="false">
-    <div   slot="container"  >
+    <div   slot="container"  class="wrap" id="wraps" >
       <div  class="content" >
         <!-----头部------->
         <div class="bar">
@@ -29,54 +29,55 @@
         </div>
         <!-----头部------->
         <mu-divider></mu-divider>
-        <!-----功能区------->
-        <div class="center">
+        <div class="menu_tabs" :class="auto_fixed" >
           <mu-tabs :value="active" indicator-color="#009688"  @change="handleChanges" class="user_menu"   full-width>
             <mu-tab value="dynamic">动态{{dynamic_num}}</mu-tab>
             <mu-tab value="like">喜欢{{love_num}}</mu-tab>
             <mu-tab value="collect">收藏{{collect_num}}</mu-tab>
           </mu-tabs>
-          <div  class="menu_content" ref="container" >
-            <div class="swiper-container" id="swiper_menu" ref="myswiper"  >
-              <div class="swiper-wrapper">
+        </div>
+        <div class="auto_fixed_fake" :style="{display: auto_fixed.fixed ? 'block':'none'}"></div>
+        <!-----功能区------->
+        <div class="center">
 
-                  <div class="swiper-slide slidepage"  >
-                    <div class="swiper-container scroll">
-                      <div class="swiper-wrapper">
+              <div class="swiper-container" id="swiper_menu" ref="myswiper"  >
+                <div class="swiper-wrapper">
+
+                  <div class="swiper-slide slidepage"   >
+                    <div class="swiper-container scrolls">
+                      <div class="swiper-wrapper" v-if="display_dynamic" >
                         <div class="swiper-slide slidescroll">
-                          <Display :type="user_dynamic" ></Display>
+                          <DisplayDynamic   ></DisplayDynamic>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                <div class="swiper-slide slidepage"  >
-                  <div class="swiper-container scrolls">
-                    <div class="swiper-wrapper">
-                      <div class="swiper-slide slidescroll">
-                        <Display type="like" ></Display>
+                  <div class="swiper-slide slidepage"    >
+                    <div class="swiper-container scrolls">
+                      <div class="swiper-wrapper" v-if="display_like" >
+                        <div class="swiper-slide slidescroll">
+                          <DisplayLike  ></DisplayLike>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="swiper-slide slidepage"  >
-                  <div class="swiper-container scroll">
-                    <div class="swiper-wrapper">
-                      <div class="swiper-slide slidescroll">
-                        <Display type="collect" ></Display>
+                  <div class="swiper-slide slidepage" >
+                    <div class="swiper-container scroll">
+                      <div class="swiper-wrapper" v-if="display_collect" >
+                        <div class="swiper-slide slidescroll">
+                          <DisplayCollect   ></DisplayCollect>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-
               </div>
             </div>
           </div>
 
-        </div >
         <!-----功能区------->
-
+  </div>
       </div>
     </div>
   </Layout>
@@ -85,7 +86,9 @@
 let _self;
 import Layout from '@/components/Layout';
 import Swiper from "swiper";
-import Display from '@/components/Personal/display';
+import DisplayDynamic from '@/components/Personal/Display_dynamic';
+import DisplayLike from '@/components/Personal/Display_like';
+import DisplayCollect from '@/components/Personal/Display_dynamic';
 import TestData from "../../../static/Json/TestData.json";
 export default {
     data: function() {
@@ -100,8 +103,13 @@ export default {
           love_num:0,
           collect_num:0,
           active:"dynamic",
-          user_dynamic:"dynamics",
-          loading:true
+          loading:true,
+          display_like:false,
+          display_dynamic:true,
+          display_collect:false,
+          auto_fixed: {
+            fixed: false
+          }
         };
     },
     created() {
@@ -109,7 +117,10 @@ export default {
     },
     mounted() {
         this.swiper_page();
-        this.swiper_scroll();
+       // this.swiper_scroll();
+      this.$nextTick(function () {
+        window.addEventListener('scroll', this.onScrolls,true)
+      })
     },
     methods: {
       GetData(){
@@ -133,24 +144,27 @@ export default {
           on: {
             transitionStart: function() {
               if (this.realIndex== 0) {
-                _this.active ="dynamic";
+                _this.active = "dynamic";
+
               }
               else if(this.realIndex==1){
                 _this.active="like";
+
               }
               else if(this.realIndex==2){
                 _this.active = "collect";
+
               }
+              _this.AvoidHeight();
             },//滑动tab相应切换
           }
         });
       },//创建横向滑动的swiper
       swiper_scroll(){
         var scrollSwiper = new Swiper('.scrolls', {
-          slidesOffsetBefore: 10,
+          slidesOffsetBefore:-100,
           direction: 'vertical',
           freeMode: true,
-          slidesPerView: 'auto',
           mousewheel: {
             releaseOnEdges: true
           }
@@ -158,8 +172,10 @@ export default {
       },//创建竖向的swiper对象
       handleChanges(val) {
         this.active = val;
-        if(val=="dynamic")
-          this.swiper.slideTo(0,0,false);
+        this.AvoidHeight();
+        if(val=="dynamic") {
+          this.swiper.slideTo(0, 0, false);
+        }
         else if(val=="like")
         {
 
@@ -167,13 +183,41 @@ export default {
         }
         else if(val=="collect")
         {
-
           this.swiper.slideTo(2,0,false);
         }
       } , //改变选中状态
       ToSetting(){
         this.$router.push("/user/setting");
+      },
+      AvoidHeight(){
+        if(this.active=="dynamic")
+        {
+          this.display_like=false;
+          this.display_collect=false;
+          this.display_dynamic=true;
+        }
+        if(this.active=="like")
+        {
+          this.display_like=true;
+          this.display_collect=false;
+          this.display_dynamic=false;
+        }
+        if(this.active=="collect")
+        {
+          this.display_like=false;
+          this.display_collect=true;
+          this.display_dynamic=false;
+        }
+
+      },
+      onScrolls(){
+        let scrolled = document.getElementById("wraps").scrollTop;
+        this.auto_fixed = {
+          auto_fixed: true,
+          fixed: scrolled >=200
+        }
       }
+
     },//跳转设置页面
     computed: {
         swiper(){
@@ -183,13 +227,15 @@ export default {
         if (this.loading === 'loaded') {
           return true;
         } else {
-          return false;
+           return false;
         }
       }
     },
     components: {
         Layout,
-        Display
+      DisplayDynamic,
+      DisplayLike,
+      DisplayCollect
     }
 };
 
@@ -200,7 +246,6 @@ export default {
      width: 100%;
      color:#bdbdbd;
     background-color: transparent;
-
   }
   .mu-tab-active {
     color: black;
@@ -209,15 +254,27 @@ export default {
     margin-top:8px;
   }
   .swiper-container{
+     width: 100%;
+     height: 100%;
+  }
+  .wrap{
     width: 100%;
     height: 100%;
-
+    position: absolute;
+    overflow: auto;
+    top:0;
+    bottom:0;
   }
 .content{
-  width: 100%;
-  height: 100%;
-  position: absolute;
+    width: 100%;
+
+    height: 100%;
+    position: absolute;
 }
+  .wrap::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+  }
 .avatar{
   position: absolute;
   top:18%;
@@ -228,7 +285,7 @@ export default {
   .bar{
     width: 100%;
     height: 30%;
-     overflow: hidden;
+    overflow: hidden;
   }
 .right{
   width:100%;;
@@ -246,14 +303,14 @@ export default {
     transform: skewY(-10deg) translate(20px,-190px);
     background: url("../../assets/images/ts.jpg") no-repeat;
     background-size:cover;
-
-
   }
   .center{
     width: 100%;
-    height: 67%;
+    height: auto;
     position: absolute;
-    bottom: 25px;
+    margin-top:60px;
+    margin-bottom:60px;
+    z-index: 0;
   }
   .ur_name{
     position: absolute;
@@ -292,9 +349,12 @@ export default {
     top: 25px;
     margin-left: -28%;
   }
-  .menu_content{
+  .menu_tabs{
     width: 100%;
-    height: 80%;
+    position: absolute;
+    height:9%;
+    z-index: 99;
+    background-color: white;
   }
   .bu_title{
     top:11%;
@@ -321,4 +381,10 @@ export default {
   .title_left{
     margin-left:-80px;
   }
+  .fixed{
+    position: fixed;
+    top:0;
+    z-index: 999;
+  }
+
 </style>

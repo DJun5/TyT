@@ -12,7 +12,7 @@ import "swiper/dist/css/swiper.min.css";
 import Mui from 'vue-awesome-mui';
 import Loading from 'muse-ui-loading';
 import axios from 'axios';
-
+import Api_Host from  './components/Common/Global_API';
 
 Vue.use(Loading);
 Vue.use(Helpers);
@@ -22,6 +22,7 @@ Vue.use(Store);
 Vue.use(Mui);
 
 Vue.prototype.$axios=axios;
+Vue.prototype.GLOBAL=Api_Host;
 Vue.config.productionTip = false;
 new Vue({
   el: '#app',
