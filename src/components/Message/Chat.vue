@@ -1,72 +1,74 @@
 <template>
 
-<div class="body">
-  <!--导航-->
-  <mu-appbar style="width: 100%;" >
-    <mu-button icon slot="left" @click="message">
-      <mu-icon value="keyboard_backspace"  ></mu-icon>
-    </mu-button>
-    <mu-list-item-title style="text-align: center;">{{nickname}}</mu-list-item-title>
-    <mu-button icon slot="right" @click="message">
-      <mu-icon value="videocam"  ></mu-icon>
-    </mu-button>
-    <mu-button icon slot="right" @click="message">
-    <mu-icon value="call"  ></mu-icon>
-  </mu-button>
-    <mu-button icon slot="right" @click="message">
-    <mu-icon value="person"  ></mu-icon>
-    </mu-button>
-  </mu-appbar>
-<!--中部-->
-<div class="middle">
-  <div style="height: 60px"></div><!--占位-->
+  <div class="body">
+    <!--导航-->
+    <mu-appbar style="width: 100%;" >
+      <mu-button icon slot="left" @click="message">
+        <mu-icon value="keyboard_backspace"  ></mu-icon>
+      </mu-button>
+      <mu-list-item-title style="text-align: center;">{{nickname}}</mu-list-item-title>
+      <mu-button icon slot="right" @click="message" >
+        <mu-icon   value="videocam" ></mu-icon>
+      </mu-button>
 
-  <my-dialogue :userData="userData"
-               class="dialogue"
-               @scrollC="scrollC"></my-dialogue>
+      <mu-button icon slot="right" @click="message">
+        <mu-icon value="call"  ></mu-icon>
+      </mu-button>
+      <mu-button icon slot="right" @click="message">
+        <mu-icon value="person"  ></mu-icon>
+      </mu-button>
+    </mu-appbar>
 
+    <!--中部-->
+    <div class="middle">
+      <div style="height: 60px"></div><!--占位-->
 
-</div>
+      <my-dialogue :userData="userData"
+                   class="dialogue"
+                   @scrollC="scrollC"></my-dialogue>
 
-  <!--底部-->
-  <div class="bottom" >
-    <div class="bottom1">
-      <mu-container>
-        <mu-text-field v-model="value12"  icon=""  placeholder="输入信息"></mu-text-field>
-        <mu-button icon  @click="sendValue" >
-          <mu-icon value="send"  ></mu-icon>
+    </div>
+
+    <!--底部-->
+    <div class="bottom" >
+      <div class="bottom1">
+        <mu-container>
+          <mu-text-field v-model="value12"  icon=""  placeholder="输入信息"></mu-text-field>
+          <mu-button icon  @click="sendValue" >
+            <mu-icon color="#dddddd" value="send"  ></mu-icon>
+          </mu-button>
+        </mu-container>
+      </div>
+
+      <div class="bottom2">
+        <mu-button icon  @click="message">
+          <mu-icon value="mic_none"  ></mu-icon>
         </mu-button>
-      </mu-container>
-    </div>
+        <mu-button icon  @click="message">
+          <mu-icon value="photo_size_select_actual"  ></mu-icon>
+        </mu-button>
+        <mu-button icon  @click="message">
+          <mu-icon value="tag_faces"  ></mu-icon>
+        </mu-button>
+        <mu-button icon  @click="message">
+          <mu-icon value="switch_video"   ></mu-icon>
+        </mu-button>
+        <mu-button icon  @click="message">
+          <mu-icon value="cloud_queue"  ></mu-icon>
+        </mu-button>
+        <mu-button icon  @click="message">
+          <mu-icon value="photo_camera"  ></mu-icon>
+        </mu-button>
+        <mu-button icon  @click="message">
+          <mu-icon value="folder_open"  ></mu-icon>
+        </mu-button>
 
-    <div class="bottom2">
-      <mu-button icon  @click="message">
-        <mu-icon value="mic_none"  ></mu-icon>
-      </mu-button>
-      <mu-button icon  @click="message">
-        <mu-icon value="photo_size_select_actual"  ></mu-icon>
-      </mu-button>
-      <mu-button icon  @click="message">
-        <mu-icon value="tag_faces"  ></mu-icon>
-      </mu-button>
-      <mu-button icon  @click="message">
-        <mu-icon value="switch_video"   ></mu-icon>
-      </mu-button>
-      <mu-button icon  @click="message">
-        <mu-icon value="cloud_queue"  ></mu-icon>
-      </mu-button>
-      <mu-button icon  @click="message">
-        <mu-icon value="photo_camera"  ></mu-icon>
-      </mu-button>
-      <mu-button icon  @click="message">
-        <mu-icon value="folder_open"  ></mu-icon>
-      </mu-button>
+      </div>
 
     </div>
+
+
   </div>
-
-
-</div>
 </template>
 
 <script>
@@ -75,12 +77,32 @@
     data () {
       return {
         value12: '',
-        nickname:用户名
+        nickname:"用户名",
+        openSimples:false
       }
     },
+    created(){
+      this.nickname = this.$route.query.name;
+    },
     methods: {
+      openSimpleDialog(){
+        this.openSimples = true;
+      },
+      closeSimpleDialog(){
+        this.openSimples = false;
+        },
       message() {
-        this.$router.push("/message");
+        if (this.leftAction) {
+          this.leftAction.call(this.$parent);
+        } else {
+          if (history.length > 1) {
+
+            this.$router.go(-1);
+          } else {
+            this.$router.push("/message");
+          }
+        }
+
       },
       sendValue() {
         if (this.value.length) {
@@ -110,18 +132,18 @@
     bottom: 0;
     text-align: center;
   }
-.bottom2{
-  text-align: center;
-  margin-top: -20px;
-  color:rgba(0,0,0,.3);
-}
-.bottom1{
-  width: 100%;
-  text-align: center;
-/*  display: flex;
-  justify-content: center;
-  padding: 0 10px;*/
-}
+  .bottom2{
+    text-align: center;
+    margin-top: -20px;
+    color:rgba(0,0,0,.3);
+  }
+  .bottom1{
+    width: 100%;
+    text-align: center;
+    /*  display: flex;
+      justify-content: center;
+      padding: 0 10px;*/
+  }
   .mu-primary-color{
     background-color: #f5f5f5;
     color: black;

@@ -142,7 +142,7 @@
           spinnerType: 'fading-circle'
         });
         const  _this=this;
-        this.$axios.get('/api/User/recommend/queryAll*', {
+        this.$axios.get('/api/User/recommend/queryAll', {
         })
           .then(function (response) {
             if(response.data.data.length!=0)

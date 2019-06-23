@@ -61,7 +61,7 @@ export default {
           })
           .then(function (response) {
             console.log(response.data);
-                 if(response.data.data=='上传成功') {
+                 if(response.data.data==='上传成功') {
                      that.GoBack();
 
                  }
@@ -105,7 +105,7 @@ export default {
     },
   watch:{
     textarea(){
-      if(this.textarea.length==0)
+      if(this.textarea.length===0)
            this.If_show=true;
       else
           this.If_show=false

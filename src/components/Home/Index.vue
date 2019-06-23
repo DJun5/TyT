@@ -85,14 +85,14 @@ export default {
            watchSlidesProgress: true,
           on: {
             transitionStart: function() {//监听滑动，切换页面
-              if (this.realIndex== 0) {
+              if (this.realIndex=== 0) {
                 _this.active1 = "attention";
               }
-              else if(this.realIndex==1){
+              else if(this.realIndex===1){
                 _this.active1="find";
                 this.find=true;
               }
-              else if(this.realIndex==2){
+              else if(this.realIndex===2){
                 _this.active1 = "recommend";
                 _this.start=true;
               }

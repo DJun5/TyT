@@ -37,7 +37,7 @@
               <span style="color: rgba(0, 0, 0, .5)">{{items.post}}</span>
             <br>
               <span>{{items.position}}</span>
-            </mu-list-item-sub-title>
+
           </mu-list-item-content>
         </mu-list-item>
         <mu-divider></mu-divider>
@@ -56,7 +56,6 @@
             <span style="color: rgba(0, 0, 0, .5)">{{items.post}}</span>
             <br>
             <span>{{items.position}}</span>
-            </mu-list-item-sub-title>
           </mu-list-item-content>
         </mu-list-item>
         <mu-divider></mu-divider>
@@ -99,10 +98,10 @@
           {"name":"张三","post":"副教授,辅导员","position":"商务英语一班、商务一英语二班","identify":":iconfont icon-jiaoshi","headImg":"",section:"外语系"},
           {"name":"李四","post":"副教授,指导教师","position":"电气自动化二班","identify":":iconfont icon-jiaoshi","headImg":"",section:"电气信息工程系"},
           {"name":"王二","post":"教授,指导教师","position":"电气自动化一班、二班","identify":":iconfont icon-jiaoshi","headImg":"",section:"电气信息工程系"},
-          {"name":"邓俊","post":"团支书","position":"软件技术一班","identify":":iconfont icon-xuesheng","headImg":"",section:"电气信息工程系"},
-          {"name":"曾洪林","post":"班长","position":"软件技术二班","identify":":iconfont icon-xuesheng","headImg":"",section:"电气信息工程系"},
-          {"name":"胥小龙","post":"无","position":"软件技术一班","identify":":iconfont icon-xuesheng","headImg":"",section:"电气信息工程系"},
-          {"name":"张蓉","post":"班主任","position":"软件技术一班","identify":":iconfont icon-jiaoshi","headImg":"",section:"电气信息工程系"},
+          {"name":"邓俊","post":"团支书","position":"2017级软件技术一班","identify":":iconfont icon-xuesheng","headImg":"",section:"电气信息工程系"},
+          {"name":"曾洪林","post":"班长","position":"2017级软件技术二班","identify":":iconfont icon-xuesheng","headImg":"",section:"电气信息工程系"},
+          {"name":"胥小龙","post":"无","position":"2017级软件技术一班","identify":":iconfont icon-xuesheng","headImg":"",section:"电气信息工程系"},
+          {"name":"张蓉","post":"导师","position":"软件技术一班","identify":":iconfont icon-jiaoshi","headImg":"",section:"电气信息工程系"},
           {"name":"李立","post":"辅导员,思想政治课教师","position":"软件技术一班、二班","identify":":iconfont icon-jiaoshi","headImg":"",section:"艺术系"},
           {"name":"汪健","post":"c#课教师","position":"软件技术一班、二班","identify":":iconfont icon-jiaoshi","headImg":""},
           {"name":"郑翔","post":"Java基础课教师","position":"软件技术一班、二班","identify":":iconfont icon-jiaoshi","headImg":"",section:"基础教学部"},
