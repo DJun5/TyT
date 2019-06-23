@@ -1,5 +1,10 @@
 <template>
     <div class="login_box">
+      <div class="backs">
+      <mu-button icon slot="left" @click="goBack">
+        <mu-icon color="#bdbdbd" :size="28" value="arrow_back"></mu-icon>
+      </mu-button>
+      </div>
         <div class="logo">
           <img class="imgs" src="../../assets/images/logo2.png">
         </div>
@@ -20,6 +25,13 @@
               <Enter/>
             </div>
             </div>
+      </div>
+      <div class="bottoms">
+        <span >登录注册代表同意
+          <a href="#">用户协议</a>
+        和
+        <a href="#">隐私政策</a>
+          </span>
       </div>
     </div>
 </template>
@@ -79,7 +91,18 @@ export default {
       {
         this.swiper.slideTo(1,0,false);
       }
-    } //改变选中状态
+    },//改变选中状态
+    goBack() {
+      if (this.leftAction) {
+        this.leftAction.call(this.$parent);
+      } else {
+        if (history.length > 1) {
+          this.$router.go(-1);
+        } else {
+          this.$router.push('/user');
+        }
+      }
+    }
 
   },
   computed: {
@@ -133,5 +156,21 @@ export default {
   }
   .mu-tabs{
     background-color: transparent;
+  }
+.bottoms{
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+  font-size: 13px;
+}
+  .backs{
+    width: 50px;
+    height: 50px;
+    position:fixed;
+    top: 2%;
+    left:1%;
+
   }
 </style>

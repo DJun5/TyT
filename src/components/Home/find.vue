@@ -5,12 +5,12 @@
     <mu-load-more @refresh="refresh" :refreshing="refreshing"  loading-text="加载中...."  :loading="load_more" @load="load">
     <!--卡片展示-->
       <mu-card  v-for="item,index in userDynamic"  :key="index">
-        <mu-card-header  :title="item.title"  :sub-title="item.title">
+        <mu-card-header  :title="item.nickname"  :sub-title="item.signature">
           <mu-avatar slot="avatar">
-            <img   :src="item.infoImg1" >
+            <img   :src="item.userHeadImg[0]" ><!--//userHeadImg[0]-->
           </mu-avatar>
           <!--加关注-->
-          <mu-button   class="mu_add" textColor="red"  v-show="item.title!==attention" @click="add_attention(item.title)"   round small >
+          <mu-button   class="mu_add" textColor="red"  v-show="item.title!==attention" @click="add_attention(item.nickname)"   round small >
             <mu-icon :size="20"  value="add" ></mu-icon>
             关注
           </mu-button>
@@ -37,7 +37,7 @@
           {{item.content}}
         </mu-card-text>
         <mu-card-media>
-          <img  v-for="imageIndex,count in imagelist"   src="../../assets/images/a.jpeg"   :key="count"  class="images" :style="{width:100/imagelist.length+'%'}" >
+          <img  v-for="list,counts in imageList"  v-lazy="list[0]"  :src="list" :key="counts"   class="images"  :style="{width:100/imageList.length+'%'}" >
         </mu-card-media>
         <mu-card-actions>
           <!--点赞-->
@@ -93,10 +93,8 @@ export default {
       collect:[],
       attention:'',
       back_show:false,
-      imagelist:[
-        {"src":"../../assets/images/a.jpeg"},
-        {"src":"../../assets/images/a.jpeg"}
-      ]
+      imageList:[],
+      userHeadImg:[]
     }
   },
     created(){ //获取json对象
@@ -124,7 +122,6 @@ export default {
       window.addEventListener('scroll', this.onScroll, true);//监听滑动
     });
   },
-
   methods: {
     if_load(){
       this.loading=false;
@@ -149,14 +146,29 @@ export default {
         spinnerType: 'fading-circle'
       });
       const  _this=this;
-      this.$axios.get( this.GLOBAL.Api_Host+'/Dynamic/queryAll.do', {
+      //this.GLOBAL.Api_Host
+      this.$axios.get(this.GLOBAL.Api_Host+'/Dynamic/queryAll.do', {
           headers: {'Content-Type': 'application/json;charset=utf-8'},// 设置传输内容的类型和编码
           withCredentials: true// 指定某个请求应该发送凭据。允许客户端携带跨域cookie，也需要此配置
         })
         .then(function (response) {
-          _this.GetSum(response.data.data);
+          console.log(response.data.data);
+          if(response.data.data!=null)
+          {
+            _this.GetSum(response.data.data);
+            _this.loading=false
+          }
+          else{
+            Toast({
+              message: '数据异常',
+              position: 'middle',
+              duration: 1000
+            });
+            _this.loading=true
+          }
+
           Indicator.close();
-          _this.loading=false
+
         })
         .catch(function (response) {
           Indicator.close();
@@ -169,6 +181,23 @@ export default {
         });
 
     },//获取数据
+    GetImage(img){
+      var images=[];
+
+      this.$axios.get(this.GLOBAL.Api_Host+'/images/'+img,{
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          "token": this.token  // 必须添加的请求头
+        },
+        responseType: "arraybuffer"
+      }).then(function(response){
+          return 'data:image/jpg;base64,' + btoa(
+              new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+      }).then(data=>{
+        images.push(data)
+        });
+      return images;
+      },
     add_attention(name) {
         /* this.$store.dispatch('add_attention',name);*/
         this.attention=name;
@@ -186,25 +215,31 @@ export default {
       this.userDynamic=[];
       for(var index in data)
       {
-        this.userDynamic.push(data[index]);
-        if(index==this.num)
+        this.imageList=[];
+        for(var i=1;i<10;i++)
         {
-          break;
+          if(data[index]["infoImg"+""+i+""]==null)
+          {
+            break;
+          }
+          this.imageList.push(this.GetImage(data[index]["infoImg"+""+i+""]));//获取发布动态的图片
         }
-      }
-      if(this.num>data.length)
+        data[index].userHeadImg=this.GetImage(data[index].userHeadImg);//获取头像
+        this.userDynamic.push(data[index]);//获取发布人的信息
+        console.log(this.imageList);
+   /*   if(index==this.num)
       {
-        this.load_all=true;
-      }
-      this.widthData=100/9+"%";
+        break;
+      }*/
+    }
     },
     load(){
-      this.load_more = true;
-      setTimeout(() => {
-        this.load_more = false;
-        this.num+=5;
-        this.GetSum();
-    }, 2000)
+//      this.load_more = true;
+//      setTimeout(() => {
+//        this.load_more = false;
+//        this.num+=5;
+//        this.GetSum();
+//    }, 2000)
     },//加载更多
     click_favorite(name){
       var if_favorite=this.likes.includes(name);
@@ -259,19 +294,23 @@ export default {
  }
  .images{
    float: left;
-   min-width: 33%;
+   min-width:33%;
+   height:100px;
    padding: 1px;
-   max-width: 100%;
+   max-width:100%;
  }
  .mu-card-actions{
    top: 10px;
    clear:both;
  }
  image[lazy=loading] {
-   width: 40px;
-   height: 300px;
-   margin: auto;
-   background-color: #e0e0e0;
+   float: left;
+   min-width:33%;
+   height:100px;
+   padding: 1px;
+   max-width:100%;
+   color: red;
+   background-color: red;
  }
 .mu-card{
   max-width: 750px;

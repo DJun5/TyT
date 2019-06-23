@@ -19,8 +19,14 @@ import WorkProcess from  '@/components/School/WorkProcess'
 import Setting from '@/components/Personal/Setting'
 import Chat  from '@/components/Message/Chat'
 import Inform  from '@/components/Message/inform'
-Vue.use(VueRouter);
+import alterUserMessage  from '@/components/settingdetail/alterUserMessage'
+import privateSetting  from '@/components/settingdetail/privateSetting'
+import moreSetting  from '@/components/settingdetail/moreSetting'
+import Blacklist  from '@/components/settingDetail/blacklist'
+import Rank  from '@/components/settingDetail/rank'
+import ChangePassword  from '@/components/settingDetail/ChangePassword'
 
+Vue.use(VueRouter);
 const routes =  [
     {
       path: '/index',
@@ -70,6 +76,7 @@ const routes =  [
       name: 'User',
       component: User,
       meta: { keepAlive: true }
+
     },
     {
     path: '/login',
@@ -81,7 +88,7 @@ const routes =  [
     path: '/addDynamic',
     name: 'AddDynamic',
     component: AddDynamic,
-    meta: { keepAlive: true }
+    meta: { keepAlive: true}
   },
   {
     path: '/find',
@@ -123,8 +130,42 @@ const routes =  [
   {
     path: '/user/setting',
     name: 'Setting',
-    component: Setting
-  }
+    component: Setting,
+
+  },
+  {
+    path: '/setting/alterUserMessage',
+    name: 'alterUserMessage',
+    component: alterUserMessage
+  },
+  {
+    path: '/setting/privateSetting',
+    name: 'privateSetting',
+    component: privateSetting
+  },
+  {
+    path: '/setting/moreSetting',
+    name: 'moreSetting',
+    component: moreSetting
+  },
+  {
+    path: '/settingDetail/blacklist',
+    name: 'Blacklist',
+    component: Blacklist
+
+  },
+  {
+    path: '/settingDetail/rank',
+    name: 'Rank',
+    component: Rank
+
+  },
+  {
+    path: '/settingDetail/ChangePassword',
+    name: 'ChangePassword',
+    component: ChangePassword
+
+  },
 
 
 

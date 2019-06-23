@@ -35,7 +35,7 @@
                       <mu-icon value="add_a_photo" color="blue"></mu-icon>
                     </mu-list-item-action>
                     <mu-list-item-title >拍摄</mu-list-item-title>
-                       <input type="file" accept="image/*" capture="camera"  @change="selectImgs($event)" >
+                       <input type="file" accept="image/*" capture="camera"   @change="selectImgs($event)" >
                   </mu-list-item>
                 </mu-list>
               </mu-bottom-sheet>
@@ -94,9 +94,12 @@ export default {
       maxLength: 9, // 图片最大数量
       maxSize: 10240000, //图片限制为10M内
       open: false,
-
-      messages:""
+      messages:"",
+      test:[]
     };
+  },
+  created(){
+    this.Files=[];
   },
   methods: {
     closeBottomSheet () {
@@ -108,6 +111,8 @@ export default {
     //选择图片
     selectImgs(event) {
       let fileList = event.target.files;
+       this.test.push(event.target.files[0]);
+      console.log(this.test);
       if (fileList.length > 9) {
         alert(this.lang.dynamic_upload_tips);
       }
@@ -123,7 +128,9 @@ export default {
         let reader = new FileReader();
         reader.onloadend = e => {
           this.getBase64(e.target.result).then(url => {
+
             this.$set(fileItem, "src", url);
+
           });
         };
         if (fileItem.size > this.maxSize) {
@@ -135,7 +142,7 @@ export default {
         }
       }
       setTimeout(() => {
-        this.$emit("getFiles", tempList);
+        this.$emit("getFiles",this.test);
       }, 300);
       this.files.splice(9);
     },

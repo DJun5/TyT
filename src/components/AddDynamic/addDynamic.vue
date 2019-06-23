@@ -24,16 +24,20 @@
 let _self;
 import Layout from '@/components/Layout';
 import UpLoad from '@/components/AddDynamic/Upload';
+import { Toast } from 'mint-ui';
 export default {
     data: function() {
         return {
           text_hint:'你是小可爱,你说的都对.....',
           imgList:[],
+          list:[],
           textarea: '',
           If_show:true
         };
     },
+
     created() {
+
         _self = this;
     },
     mounted() {
@@ -41,22 +45,33 @@ export default {
     },
     methods: {
       publish(){
-        var that=this;
-        /*this.GLOBAL.Api_Host//移动端时*/
-        this.$axios.post('/api/Dynamic/addSubmit.do', {
-            userId:4,
-            title:"hello world",
-            content:"sdsdsads",
-            dynamicOpenDegreeId:"全校可见",
-            dynamicType:"生活",
-            headers: {'Content-Type': 'application/json;charset=utf-8'},// 设置传输内容的类型和编码
+        const  that=this;
+        let param = new  window.FormData();
+        for( var i = 0; i < this.imgList.length; i++ ){
+          param.append("file",this.imgList[i]);
+        }
+        param.append('userId',5);
+        param.append('title',"hello world");
+        param.append('content',this.textarea);
+        param.append('dynamicOpenDegreeId',3);
+        param.append('dynamicType',4);
+        this.$axios.post('/api/Dynamic/addSubmit.do',param, {
+            headers: {'Content-Type': 'multipart/form-data'},// 设置传输内容的类型和编码
             withCredentials: true// 指定某个请求应该发送凭据。允许客户端携带跨域cookie，也需要此配置
           })
           .then(function (response) {
-                 if(response.status==200) {
-                     this.GoBack();
-                 }else {
-                   console.log(response.msg);
+            console.log(response.data);
+                 if(response.data.data=='上传成功') {
+                     that.GoBack();
+
+                 }
+                 else {
+                   Toast({
+                     message: '发布失败！',
+                     position: 'middle',
+                     duration: 1000
+                   });
+
                  }
           })
           .catch(function (response) {
@@ -65,6 +80,8 @@ export default {
 
       },
       GoBack(){
+        this.textarea="";
+
         if (this.leftAction) {
           this.leftAction.call(this.$parent);
         } else {
@@ -77,16 +94,7 @@ export default {
 
       },
       getImageList(files) {
-        this.$nextTick(() => {
-          for (let i = 0, len = files.length; i < len; i++) {
-          this.imgList.push(files[i].src.split("base64,")[1]);
-          //上传图片
-          //   this._getFileCode({
-          //     Base64Str: files[i].src.split("base64,")[1],
-          //     AttachmentType: this.$enums.AttachmentType.Activity
-          //   });
-        }
-      });
+         this.imgList=files;//获取选择的图片信息
       },
       //删除图片
       removeImage(index) {

@@ -6,7 +6,7 @@
         <mu-card  v-for="item,index in userDynamic"  :key="index">
           <mu-card-header  :title="item.username"  :sub-title="item.signature">
             <mu-avatar slot="avatar">
-          <!--    <img   :src="item.userHeadImg" >-->
+              <img   :src="item.userHeadImg[0]" >
             </mu-avatar>
             <!--加关注-->
             <mu-button class="mu_add" textColor="red" @click="add_attention(item.user_name)"   round small >
@@ -36,7 +36,7 @@
             {{item.userType}}
           </mu-card-text>
           <mu-card-media>
-            <!--<img  v-for="imageIndex,count in imagelist"   src="../../assets/images/a.jpeg"   :key="count"  class="images" :style="{width:100/imagelist.length+'%'}" >-->
+            <img  v-for="list,count in imageList" v-lazy="list[0]"   :src="list"   :key="count"  class="images" :style="{width:100/imageList.length+'%'}" >
           </mu-card-media>
           <mu-card-actions>
             <!--点赞-->
@@ -79,12 +79,13 @@
          loading:false,
          likes:[],
          collect:[],
+         imageList:[],
          st:[],
          load_all:false
        }
     },
     created(){ //获取json对象
-
+       // this.GetData()
     },
     props:{
       DataLoad:{
@@ -116,20 +117,50 @@
         this.loading=false;
         this.GetData();
       },
+      GetImage(img){
+        const  _this=this;
+        var images=[];
+        this.$axios.get('/api/images/'+img,{
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            "token": this.token  // 必须添加的请求头
+          },
+          responseType: "arraybuffer"
+        }).then(function(response){
+          return 'data:image/jpg;base64,' + btoa(
+              new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+        }).then(data=>{
+          images.push(data)
+      });
+        /*console.log("dsadas");
+         console.log(this.userHeadImg);*/
+        return images;
+      },
       GetData(){
         Indicator.open({
           text: '加载中...',
           spinnerType: 'fading-circle'
         });
         const  _this=this;
-        this.$axios.get( this.GLOBAL.Api_Host +'/User/recommend/queryAll*', {
-          headers: {'Content-Type': 'application/json;charset=utf-8'},// 设置传输内容的类型和编码
-          withCredentials: true// 指定某个请求应该发送凭据。允许客户端携带跨域cookie，也需要此配置
+        this.$axios.get('/api/User/recommend/queryAll*', {
         })
           .then(function (response) {
-            _this.GetSum(response.data.data);
-            Indicator.close();
-            _this.loading=false
+            if(response.data.data.length!=0)
+            {
+              _this.GetSum(response.data.data);
+              Indicator.close();
+              _this.loading=false
+            }
+            else{
+              Indicator.close();
+              Toast({
+                message: '数据异常.',
+                position: 'middle',
+                duration: 1000
+              });
+              _this.loading=true
+            }
+
           })
           .catch(function (response) {
             Indicator.close();
@@ -155,6 +186,16 @@
         this.userDynamic=[];
         for(var index in data)
         {
+          this.imageList=[];
+          for(var i=1;i<10;i++)
+          {
+            if(data[index]["infoImg"+""+i+""]==null)
+            {
+              break;
+            }
+            this.imageList.push(this.GetImage(data[index]["infoImg"+""+i+""]));//获取发布动态的图片
+          }
+          data[index].userHeadImg=this.GetImage( data[index].userHeadImg);
           this.userDynamic.push(data[index]);
           if(index==this.num)
           {
@@ -227,9 +268,10 @@
     margin: 0 auto;
   }
   image[lazy=loading] {
-    width: 40px;
-    height: 300px;
-    margin: auto;
+    float: left;
+    min-width: 33%;
+    padding: 1px;
+    max-width: 100%;
   }
 
 </style>

@@ -6,13 +6,6 @@
         <mu-button :ripple="false"  v-show="!send_code" :disabled="!send_code" class="get_code" flat>{{timer}}s</mu-button>
       </mu-text-field>
       <mu-button  :ripple="false" @click="login"  class="login_btn" :disabled="shows" >登录</mu-button>
-      <div class="bottoms">
-        <span >登录注册代表同意
-          <a href="#">用户协议</a>
-        和
-        <a href="#">隐私政策</a>
-          </span>
-      </div>
     </div>
 </template>
 <script>
@@ -66,6 +59,7 @@
     if(this.verify_code==this.codes)
     {
       this.$router.push("/");
+
     }
     else {
       this.$toast({
